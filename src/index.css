@@ -1,13 +1,128 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+
+:root {
+  --form-width: 50%;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.header-center {
+  text-align: center;
+  margin: auto;
+  width: var(--form-width);
+}
+
+.header-left {
+  text-align: left;
+  float: left;
+  margin: 0 0 0 10px;
+}
+
+.header-left h1 {
+  font-size: 30px;
+}
+
+.header-left h3 {
+  font-size: 11px;
+}
+
+.time-select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+}
+
+.init-form {
+  width: var(--form-width);
+  margin: auto auto 40px;
+}
+
+.form-control {
+  margin: 20px 0;
+}
+
+.form-control label {
+  margin-left: 6px;
+  display: block;
+}
+
+.form-control input, .form-control select{
+  width: 100%;
+  height: 40px;
+  margin: 5px;
+  padding: 3px 7px;
+  font-size: 17px;
+}
+
+.btn {
+  display: inline-block;
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
+.board {
+  margin: auto auto 10px;
+  /*background-color: lightgray;*/
+  background-color: white;
+  width: 90vh;
+  height: 90vh;
+}
+
+.center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.square {
+  float: left;
+  height: 100%;
+  width: 12.5%;
+  font-size: 12px;
+}
+
+.row {
+  height: 12.5%;
+  width: 100%;
+}
+
+.dark {
+  background-color: rgb(125 135 150);
+}
+
+.light {
+  background-color: rgb(232 235 239);
+}
+
