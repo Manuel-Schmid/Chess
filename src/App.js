@@ -12,14 +12,29 @@ import * as Pieces from "./Piece";
 
 const App = () => {
     const [formCompleted, setFormCompleted] = useState(true) // !!! wäre eigentlich 'false' !!!
+    const [hlCoords, setHlCoords] = useState({
+        hX: 0,
+        hY: 0
+    })
+    // const [rerender, setRerender] = useState(false)
 
-    const highlight = (list, x, y) => {
+    const changeHighlight = (list, x, y, highlight) => {
         for(let i = 0; i < list.length; i++) {
             let fieldRow = list[i];
             for(let j = 0; j < fieldRow.length; j++) {
                 if(fieldRow[j].getX() === x && fieldRow[j].getY() === y) {
-                    console.log(fieldRow[j].getPiece().getName())
-                    fieldRow[j].setHighlighted(true)
+                    fieldRow[j].setHighlighted(highlight)
+                }
+            }
+        }
+    }
+
+    const getField = (list, x, y) => {
+        for(let i = 0; i < list.length; i++) {
+            let fieldRow = list[i];
+            for(let j = 0; j < fieldRow.length; j++) {
+                if(fieldRow[j].getX() === x && fieldRow[j].getY() === y) {
+                    return fieldRow[j]
                 }
             }
         }
@@ -27,7 +42,24 @@ const App = () => {
 
     const highlightSquare = (x, y) => {
         let newFields = fields
-        highlight(newFields, x, y)
+        if(!getField(newFields, x, y).getHighlighted()) { // not highlighted
+            console.log('not highlighted')
+            if (hlCoords.hX !== 0 || hlCoords.hY !== 0) {
+                changeHighlight(newFields, hlCoords.hX, hlCoords.hY, false)
+            }
+            changeHighlight(newFields, x, y, true)
+            setHlCoords({
+                hX: x,
+                hY: y
+            })
+        } else {
+            console.log('already highlighted')
+            changeHighlight(newFields, x, y, false) // already highlighted
+            setHlCoords({
+                hX: 0,
+                hY: 0
+            })
+        }
 
         setFields(newFields)
     }
