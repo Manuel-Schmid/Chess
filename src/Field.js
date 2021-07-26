@@ -1,7 +1,9 @@
 class Field {
-    constructor(piece, isEmpty) {
+    constructor(x, y, piece) {
+        this.x = x
+        this.y = y
         this.piece = piece
-        this.isEmpty = isEmpty
+        this.highlighted = false
     }
 
     setPiece(piece) {
@@ -11,4 +13,22 @@ class Field {
     getPiece() {
         return this.piece
     }
+
+    getX() {
+        return this.x
+    }
+
+    getY() {
+        return this.y
+    }
+
+    getHighlighted() {
+        return this.highlighted;
+    }
+
+    setHighlighted(value) {
+        this.highlighted = value;
+    }
 }
+
+export {Field}

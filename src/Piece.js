@@ -1,6 +1,14 @@
 class Piece {
-    constructor(color) {
+    constructor(color, name) {
         this.color = color;
+        this.name = name
+    }
+
+    getColor() {
+        return this.color
+    }
+    getName() {
+        return this.name
     }
 }
 
@@ -10,3 +18,10 @@ class Knight extends Piece {}
 class Bishop extends Piece {}
 class Queen extends Piece {}
 class King extends Piece {}
+
+export {Pawn};
+export {Rook};
+export {Knight};
+export {Bishop};
+export {Queen};
+export {King};

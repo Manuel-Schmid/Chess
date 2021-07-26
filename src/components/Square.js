@@ -1,4 +1,6 @@
-const Square = ({ fieldNr,oddRow }) => {
+import PieceIcon from "./PieceIcon";
+
+const Square = ({ field, fieldNr, oddRow, highlightSquare }) => {
     const isOdd = (num) => {
         return !(num % 2 === 0);
     }
@@ -9,8 +11,15 @@ const Square = ({ fieldNr,oddRow }) => {
     }
 
     return (
-        <div className={`square ${calcColor((oddRow === 'true'), isOdd(fieldNr))}`} >
-            {fieldNr}
+        <div
+            className={`square ${calcColor((oddRow === 'true'), isOdd(fieldNr))} ${field.getHighlighted() ? 'highlighted':''}`} >
+            { field.getPiece() !== 'empty' &&
+                <div className={'icon-container'} onClick={() => highlightSquare(field.getX(), field.getY())}>
+                    <PieceIcon
+                        piece={field.getPiece().getName()}
+                        color={field.getPiece().getColor()}/>
+                </div>
+            }
         </div>
     )
 }

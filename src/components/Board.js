@@ -1,6 +1,6 @@
 import Square from "./Square";
 
-const Board = ({ fields }) => {
+const Board = ({ fields, highlightSquare }) => {
 
     let oddRow = true
     const changeRow = () => {
@@ -9,13 +9,20 @@ const Board = ({ fields }) => {
     }
 
     let rowKey = 0;
-    let key = 0;
+    let key = 1;
 
     return (
         <div className="board center">
             {fields.map((innerArray) => (
                 <div key={rowKey++} className={'row'}>
-                    { innerArray.map((fieldNr) => <Square key={key++} fieldNr={fieldNr} oddRow={`${fieldNr === 1 ?changeRow():oddRow}`}/> )}
+                    { innerArray.map((field) =>
+                        <Square
+                            key={key++}
+                            field={field}
+                            fieldNr={field.getX()}
+                            highlightSquare={highlightSquare}
+                            oddRow={`${field.getX() === 1 ?changeRow():oddRow}`}/> )
+                    }
                 </div>
             ))}
         </div>
