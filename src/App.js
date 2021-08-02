@@ -20,13 +20,28 @@ const App = () => {
     const [turn, setTurn] = useState('white')
     const [lastTurn, setLastTurn] = useState('nobody')
     // const [rerender, setRerender] = useState(false)
+    const [possibleMoveFields, setPossibleMoveFields] = useState(
+        [{
+            pX: 0,
+            pY: 0
+        }]
+    )
 
 
     const switchTurn = () => {
-        setFields(resetLastHighlight(fields))
+        let newFields
+        newFields = resetLastHighlight(fields)
+        setFields(resetPossibleMoveHighlights(newFields))
         if(turn !== 'nobody')
             if(turn === 'white') setTurn('black')
             else if(turn === 'black') setTurn('white')
+    }
+
+    const highLightPossibleMoves = (newFields, field, highlight) => {
+        const possibleMoves = field.getPiece().getMoves(newFields, field)
+        for (const move of possibleMoves) {
+            changeHighlight(newFields, move.x, move.y, highlight)
+        }
     }
 
     const changeHighlight = (list, x, y, highlight) => {
@@ -47,12 +62,19 @@ const App = () => {
         return newFields
     }
 
+    const resetPossibleMoveHighlights = (newFields) => {
+        if (hlCoords.hX !== 0 || hlCoords.hY !== 0) {
+            highLightPossibleMoves(newFields, getField(newFields, hlCoords.hX, hlCoords.hY), false)
+        }
+        return newFields
+    }
+
     const pauseMatch = (pause) => {
         setPaused(pause)
         if (pause) { // Match pausieren
             let newFields = fields
             newFields = resetLastHighlight(newFields)
-            setFields(newFields)
+            setFields(resetPossibleMoveHighlights(newFields))
             setLastTurn(turn)
             setTurn('nobody')
         } else { // Match geht weiter
@@ -73,6 +95,7 @@ const App = () => {
 
     const highlightSquare = (x, y) => {
         let newFields = fields
+        resetPossibleMoveHighlights(newFields)
         if(!getField(newFields, x, y).getHighlighted()) { // not highlighted
             newFields = resetLastHighlight(newFields)
             changeHighlight(newFields, x, y, true)
@@ -80,12 +103,19 @@ const App = () => {
                 hX: x,
                 hY: y
             })
+            // highlight possible fields
+            highLightPossibleMoves(newFields, getField(newFields, x, y), true)
+
         } else {
             changeHighlight(newFields, x, y, false) // already highlighted
             setHlCoords({
                 hX: 0,
                 hY: 0
             })
+            // un-highlight possible fields
+            // for (const field of possibleMoveFields) {
+            //     changeHighlight(newFields, field.getX(), field.getY(), false)
+            // }
         }
 
         setFields(newFields)
@@ -147,17 +177,20 @@ const App = () => {
             new Field(2, 6, 'empty'),
             new Field(3, 6, 'empty'),
             new Field(4, 6, 'empty'),
-            new Field(5, 6, 'empty'),
+            // new Field(5, 6, 'empty'),
+            new Field(5, 6, new Pieces.Pawn('black', 'Pawn')),
             new Field(6, 6, 'empty'),
-            new Field(7, 6, 'empty'),
+            // new Field(7, 6, 'empty'),
+            new Field(7, 6, new Pieces.Pawn('black', 'Pawn')),
             new Field(8, 6, 'empty'),
         ],
         [
-            new Field(1, 7, new Pieces.Pawn('white', 'Pawn')),
-            new Field(2, 7, new Pieces.Pawn('white', 'Pawn')),
-            new Field(3, 7, new Pieces.Pawn('white', 'Pawn')),
-            new Field(4, 7, new Pieces.Pawn('white', 'Pawn')),
-            new Field(5, 7, new Pieces.Pawn('white', 'Pawn')),
+            // new Field(1, 7, new Pieces.Pawn('white', 'Pawn')),
+            new Field(1, 7, 'empty'), // delete this line
+            new Field(2, 7, 'empty'), // delete this line
+            new Field(3, 7, 'empty'), // delete this line
+            new Field(4, 7, 'empty'), // delete this line
+            new Field(5, 7, 'empty'), // delete this line
             new Field(6, 7, new Pieces.Pawn('white', 'Pawn')),
             new Field(7, 7, new Pieces.Pawn('white', 'Pawn')),
             new Field(8, 7, new Pieces.Pawn('white', 'Pawn')),
@@ -167,14 +200,14 @@ const App = () => {
             new Field(2, 8, new Pieces.Knight('white', 'Knight')),
             new Field(3, 8, new Pieces.Bishop('white', 'Bishop')),
             new Field(4, 8, new Pieces.Queen('white', 'Queen')),
-            new Field(5, 8, new Pieces.King('white', 'Queen')),
+            new Field(5, 8, new Pieces.King('white', 'King')),
             new Field(6, 8, new Pieces.Bishop('white', 'Bishop')),
             new Field(7, 8, new Pieces.Knight('white', 'Knight')),
             new Field(8, 8, new Pieces.Rook('white', 'Rook')),
         ],
     ])
 
-    let player1 = 'Manuel', player2 = 'Fabian', time = '200'
+    let player1 = 'Manuel', player2 = 'Fabian', time = '60'
     let matchData = []
     matchData.push(player1, player2, time)
 

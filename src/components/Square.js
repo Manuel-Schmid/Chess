@@ -15,6 +15,7 @@ const Square = ({ field, fieldNr, oddRow, highlightSquare, clickable }) => {
     return (
         <div
             className={`square ${calcColor((oddRow === 'true'), isOdd(fieldNr))} ${field.getHighlighted() ? 'highlighted':''}`} >
+            {field.getX() + " | " + field.getY()} {/* delete this line !!!*/}
             { field.getPiece() !== 'empty' &&
                 <div
                     className={`icon-container ${clickable ? 'clickable' : ''}`}
