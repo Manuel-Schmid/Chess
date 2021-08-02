@@ -1,6 +1,6 @@
 import Square from "./Square";
 
-const Board = ({ fields, highlightSquare }) => {
+const Board = ({ fields, highlightSquare, turn }) => {
 
     let oddRow = true
     const changeRow = () => {
@@ -10,6 +10,13 @@ const Board = ({ fields, highlightSquare }) => {
 
     let rowKey = 0;
     let key = 1;
+
+    const getClickable = (field) => {
+        if (field.getPiece() !== 'empty') {
+            return field.getPiece().getColor() === turn
+        }
+        return false
+    }
 
     return (
         <div className="board">
@@ -21,7 +28,9 @@ const Board = ({ fields, highlightSquare }) => {
                             field={field}
                             fieldNr={field.getX()}
                             highlightSquare={highlightSquare}
-                            oddRow={`${field.getX() === 1 ?changeRow():oddRow}`}/> )
+                            oddRow={`${field.getX() === 1 ?changeRow():oddRow}`}
+                            clickable={getClickable(field)}
+                        /> )
                     }
                 </div>
             ))}

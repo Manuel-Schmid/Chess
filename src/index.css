@@ -94,6 +94,30 @@ body {
 
 }
 
+.pause-btn {
+  height: 10vh;
+  width: 60%;
+  background-color: #191343; /* Green */
+  border: none;
+  color: white;
+  /*padding: 15px 32px;*/
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 22px;
+  transition-duration: 0.25s;
+}
+
+.pause-btn:hover {
+  transition-duration: 0.25s;
+  width: 70%;
+  background-color: #110d31; /* Green */
+}
+
+.pause-btn:focus {
+
+}
+
 .clock-container {
   height: 100vh;
   width: calc(100vw - (50vw + 45vh));
@@ -102,15 +126,11 @@ body {
 }
 
 .player-info {
-   height: 50vh;
+   height: 45vh;
 }
 
 .player-info h2 {
   font-size: 25px;
-}
-
-.btnSwitch {
-  position: absolute;
 }
 
 .board {
@@ -150,8 +170,16 @@ body {
   position: relative;
   top: 17%;
   vertical-align: middle;
-  cursor: pointer;
   font-size: 40px;
+}
+
+.switchBtn {
+  top: 80px;
+  position: absolute;
+}
+
+.clickable {
+  cursor: pointer;
 }
 
 .black {

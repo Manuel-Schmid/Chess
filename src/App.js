@@ -12,11 +12,22 @@ import * as Pieces from "./Piece";
 
 const App = () => {
     const [formCompleted, setFormCompleted] = useState(true) // !!! wäre eigentlich 'false' !!!
+    const [paused, setPaused] = useState(false)
     const [hlCoords, setHlCoords] = useState({
         hX: 0,
         hY: 0
     })
+    const [turn, setTurn] = useState('white')
+    const [lastTurn, setLastTurn] = useState('nobody')
     // const [rerender, setRerender] = useState(false)
+
+
+    const switchTurn = () => {
+        setFields(resetLastHighlight(fields))
+        if(turn !== 'nobody')
+            if(turn === 'white') setTurn('black')
+            else if(turn === 'black') setTurn('white')
+    }
 
     const changeHighlight = (list, x, y, highlight) => {
         for(let i = 0; i < list.length; i++) {
@@ -26,6 +37,26 @@ const App = () => {
                     fieldRow[j].setHighlighted(highlight)
                 }
             }
+        }
+    }
+
+    const resetLastHighlight = (newFields) => {
+        if (hlCoords.hX !== 0 || hlCoords.hY !== 0) {
+            changeHighlight(newFields, hlCoords.hX, hlCoords.hY, false)
+        }
+        return newFields
+    }
+
+    const pauseMatch = (pause) => {
+        setPaused(pause)
+        if (pause) { // Match pausieren
+            let newFields = fields
+            newFields = resetLastHighlight(newFields)
+            setFields(newFields)
+            setLastTurn(turn)
+            setTurn('nobody')
+        } else { // Match geht weiter
+            setTurn(lastTurn)
         }
     }
 
@@ -43,17 +74,13 @@ const App = () => {
     const highlightSquare = (x, y) => {
         let newFields = fields
         if(!getField(newFields, x, y).getHighlighted()) { // not highlighted
-            console.log('not highlighted')
-            if (hlCoords.hX !== 0 || hlCoords.hY !== 0) {
-                changeHighlight(newFields, hlCoords.hX, hlCoords.hY, false)
-            }
+            newFields = resetLastHighlight(newFields)
             changeHighlight(newFields, x, y, true)
             setHlCoords({
                 hX: x,
                 hY: y
             })
         } else {
-            console.log('already highlighted')
             changeHighlight(newFields, x, y, false) // already highlighted
             setHlCoords({
                 hX: 0,
@@ -150,7 +177,6 @@ const App = () => {
     let player1 = 'Manuel', player2 = 'Fabian', time = '200'
     let matchData = []
     matchData.push(player1, player2, time)
-    // const [board, setBoard] = useState([]) // initial state, change would be made with 'setTasks()'
 
     const initMatch = (user1, user2, duration) => {
         player1 = user1
@@ -167,7 +193,15 @@ const App = () => {
             <InitGame onCompleted={() => setFormCompleted(true)} initMatch={initMatch}/>
         }
         { formCompleted &&
-            <Match matchData={matchData} fields={fields} highlightSquare={highlightSquare}/>
+            <Match
+                matchData={matchData}
+                fields={fields}
+                highlightSquare={highlightSquare}
+                paused={paused}
+                pauseMatch={pauseMatch}
+                turn={turn}
+                switchTurn={switchTurn}
+            />
         }
     </div>
   );
