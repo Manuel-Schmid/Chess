@@ -12,7 +12,7 @@ const Board = ({ fields, highlightSquare }) => {
     let key = 1;
 
     return (
-        <div className="board center">
+        <div className="board">
             {fields.map((innerArray) => (
                 <div key={rowKey++} className={'row'}>
                     { innerArray.map((field) =>
