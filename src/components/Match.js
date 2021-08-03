@@ -2,22 +2,11 @@ import Board from "./Board";
 // import Countdown from "react-countdown";
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import {useRef, useState} from "react";
+import PieceIcon from "./PieceIcon";
 
 
-const Match = ({ matchData, fields, highlightSquare, paused, pauseMatch, turn, switchTurn }) => {
+const Match = ({ matchData, startGame, started, fields, highlightSquare, paused, pauseMatch, turn, movePiece, deadPieces }) => {
     let player1 = matchData[0], player2 = matchData[1], time = matchData[2]
-
-    // const Completion = () => <span>Time's up!</span>;
-    //
-    // const renderer = ({ hours, minutes, seconds, completed }) => {
-    //     if (completed) {
-    //         // Render a completed state
-    //         return <Completion />;
-    //     } else {
-    //         // Render a countdown
-    //         return <span>{hours}:{minutes}:{seconds}</span>;
-    //     }
-    // };
 
     const renderTime = ({ remainingTime }) => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -77,17 +66,35 @@ const Match = ({ matchData, fields, highlightSquare, paused, pauseMatch, turn, s
         pauseMatch(!paused)
     }
 
+    let key = 0;
+
     return (
         <div className={'match'}>
-            <button className={'switchBtn'} onClick={() => switchTurn()}>switch turns</button>  {/* only temporary button !!!*/}
-            <Board fields={fields} highlightSquare={highlightSquare} turn={turn}/>
+            <div className={'death-container'}>
+                <div className={'death-pool player-info'}>
+                    <div className={'dead-pieces-container top'}>
+                        {deadPieces[0].map((piece) => (
+                            <PieceIcon key={key++} piece={piece.getName()} color={piece.getColor()}/>
+                        ))}
+                    </div>
+                </div>
+                <button className={`big-btn start-btn ${started ? 'started' : ''}`} onClick={() => startGame()}>{!started ? 'Start' : 'End Game'}</button>
+                <div className={'death-pool player-info'}>
+                    <div className={'dead-pieces-container bottom'}>
+                        {deadPieces[1].map((piece) => (
+                            <PieceIcon key={key++} piece={piece.getName()} color={piece.getColor()}/>
+                        ))}
+                    </div>
+                </div>
+            </div>
+            <Board fields={fields} highlightSquare={highlightSquare} turn={turn} movePiece={movePiece} />
             <div className={'clock-container'}>
                 <div className={'player-info'}>
                     <div className={'center-content'}>
-                        <h2>Black</h2>
+                        <h2>{player2}</h2>
                         <CountdownCircleTimer
                             size={150}
-                            isPlaying={(turn === 'black') && (paused === false)}
+                            isPlaying={(started) && (turn === 'black') && (!paused)}
                             duration={time*60}
                             colors={[["#004777", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
                         >
@@ -95,13 +102,13 @@ const Match = ({ matchData, fields, highlightSquare, paused, pauseMatch, turn, s
                         </CountdownCircleTimer>
                     </div>
                 </div>
-                <button onClick={pause} className={'pause-btn'}>{paused ? 'unpause' : 'pause'}</button>
+                <button onClick={pause} className={`pause-btn big-btn ${paused ? 'paused-btn' : ''}`}>{paused ? 'unpause' : 'pause'}</button>
                 <div className={'player-info'}>
                     <div className={'center-content'}>
-                        <h2>White</h2>
+                        <h2>{player1}</h2>
                         <CountdownCircleTimer
                             size={150}
-                            isPlaying={(turn === 'white') && (paused === false)}
+                            isPlaying={(started) && (turn === 'white') && (!paused)}
                             duration={time*60}
                             colors={[["#004777", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
                         >

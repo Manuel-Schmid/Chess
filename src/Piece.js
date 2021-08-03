@@ -95,7 +95,6 @@ class Pawn extends Piece {
     }
 
     getMoves(fieldList, field) {
-        console.log('Pawn')
         let possibleMoveList = []
 
         const walkRange = (this.firstMove ? 2 : 1)
@@ -110,16 +109,18 @@ class Pawn extends Piece {
             } else break
         }
 
+        // diagonal left
         const catchField = this.getField(fieldList, field.getX() - 1, field.getY() + (1 * multiplier))
         if (catchField !== 'NA') {
-            if (catchField.getPiece() !== 'empty') {
+            if (catchField.getPiece() !== 'empty' && catchField.getPiece().getColor() !== this.getColor()) {
                 possibleMoveList.push({x:catchField.getX(), y:catchField.getY()})
             }
         }
 
+        // diagonal right
         const catchField2 = this.getField(fieldList, field.getX() + 1, field.getY() + (1 * multiplier))
         if (catchField2 !== 'NA') {
-            if (catchField2.getPiece() !== 'empty') {
+            if (catchField2.getPiece() !== 'empty' && catchField2.getPiece().getColor() !== this.getColor()) {
                 possibleMoveList.push({x: catchField2.getX(), y: catchField2.getY()})
             }
         }
@@ -131,7 +132,6 @@ class Pawn extends Piece {
 
 class Rook extends Piece {
     getMoves(fieldList, field) {
-        console.log('Rook')
         let possibleMoveList = []
 
         this.markStraights(fieldList, field, possibleMoveList)
@@ -142,7 +142,6 @@ class Rook extends Piece {
 
 class Knight extends Piece {
     getMoves(fieldList, field) {
-        console.log('Knight')
         let possibleMoveList = []
 
         // every possible knight-move
@@ -157,12 +156,10 @@ class Knight extends Piece {
 
         return possibleMoveList
     }
-
 }
 
 class Bishop extends Piece {
     getMoves(fieldList, field) {
-        console.log('Bishop')
         let possibleMoveList = []
 
         this.markDiagonals(fieldList, field, possibleMoveList);
@@ -173,7 +170,6 @@ class Bishop extends Piece {
 
 class Queen extends Piece {
     getMoves(fieldList, field) {
-        console.log('Queen')
         let possibleMoveList = []
 
         this.markStraights(fieldList, field, possibleMoveList);
@@ -185,7 +181,6 @@ class Queen extends Piece {
 
 class King extends Piece {
     getMoves(fieldList, field) {
-        console.log('King')
         let possibleMoveList = []
 
         // one square in every direction
@@ -203,6 +198,7 @@ class King extends Piece {
     }
 }
 
+export {Piece};
 export {Pawn};
 export {Rook};
 export {Knight};

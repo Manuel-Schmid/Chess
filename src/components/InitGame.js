@@ -1,4 +1,4 @@
-const InitGame = ({ onCompleted, initMatch }) => {
+const InitGame = ({ initMatch }) => {
     let player1 = ''
     let player2 = ''
     let time = 0
@@ -13,7 +13,6 @@ const InitGame = ({ onCompleted, initMatch }) => {
         }
 
         initMatch(player1, player2, time)
-        onCompleted()
     }
 
     const setValues = () => {
