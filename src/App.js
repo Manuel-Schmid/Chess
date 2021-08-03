@@ -97,14 +97,14 @@ const App = () => {
 
     const [fields, setFields] = useState(initialFieldState)
     const [matchData, setMatchData] = useState(['White', 'Black', '360'])
-    const [formCompleted, setFormCompleted] = useState(true) // !!! wäre eigentlich 'false' !!!
+    const [formCompleted, setFormCompleted] = useState(false) // !!! wäre eigentlich 'false' !!!
     const [paused, setPaused] = useState(false)
     const [started, setStarted] = useState(false)
     const [hlCoords, setHlCoords] = useState({ hX: 0, hY: 0 })
-    const [turn, setTurn] = useState('white')
+    const [turn, setTurn] = useState('nobody')
     const [lastTurn, setLastTurn] = useState('nobody')
     const [deadPieces, setDeadPieces] = useState([[], []])
-    const [rerender, setRerender] = useState(false) // not optimal
+    // const [rerender, setRerender] = useState(false) // not optimal
 
     const resetEverything = () => {
         setFields(initialFieldState)
@@ -113,10 +113,10 @@ const App = () => {
         setPaused(false)
         setStarted(false)
         setHlCoords({ hX: 0, hY: 0 })
-        setTurn('white')
+        setTurn('nobody')
         setLastTurn('nobody')
         setDeadPieces([[], []])
-        setRerender(false)
+        // setRerender(false)
     }
 
     const switchTurn = () => {
@@ -276,7 +276,10 @@ const App = () => {
     }
 
     const startGame = () => {
-        if (!started) setStarted(true) // start game
+        if (!started) {// start game
+            setTurn('white')
+            setStarted(true)
+        }
         else resetEverything() // end game
     }
 

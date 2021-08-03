@@ -11,9 +11,6 @@ const Square = ({ field, fieldNr, oddRow, highlightSquare, pieceSelectable, move
     }
 
     const doNothing = () => {}
-    const move = () => {
-        console.log('move')
-    }
 
     return (
         <div

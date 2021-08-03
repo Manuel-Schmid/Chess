@@ -50,14 +50,15 @@ const Match = ({ matchData, startGame, started, fields, highlightSquare, paused,
                 <div key={remainingTime} className={`time ${isTimeUp ? "up" : ""}`}>
                     {formatTime(remainingTime)}
                 </div>
-                {/*{prevTime.current !== null && (*/}
-                {/*    <div*/}
-                {/*        key={prevTime.current}*/}
-                {/*        className={`time ${!isTimeUp ? "down" : ""}`}*/}
-                {/*    >*/}
-                {/*        {formatTime(prevTime.current)}*/}
-                {/*    </div>*/}
-                {/*)}*/}
+                {(time <= 10) &&
+                    prevTime.current !== null && (
+                    <div
+                        key={prevTime.current}
+                        className={`time ${!isTimeUp ? "down" : ""}`}
+                    >
+                        {formatTime(prevTime.current)}
+                    </div>
+                )}
             </div>
         );
     }
