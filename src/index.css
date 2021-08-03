@@ -91,12 +91,9 @@ body {
   width: 100%;
 }
 
-.match {
-
-}
-
 .pause-btn {
-  width: 60%;}
+  width: 60%;
+}
 
 .pause-btn:hover {
   width: 70%;
@@ -237,6 +234,7 @@ body {
   height: 5vh;
   width: 5vh;
   background-color: #a4e284;
+  /*background-color: lightblue;*/
   border-radius: 50%;
   display: inline-block;
 }
@@ -305,7 +303,7 @@ body {
   width: 80px;
   height: 60px;
   font-size: 38px;
-  font-family: "Montserrat";
+  font-family: "Montserrat", serif;
 }
 
 .center-content {

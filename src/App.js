@@ -97,7 +97,7 @@ const App = () => {
         ]
 
     const [fields, setFields] = useState(initialFieldState)
-    const [matchData, setMatchData] = useState(['White', 'Black', '360'])
+    const [matchData, setMatchData] = useState(['White', 'Black', '1'])
     const [formCompleted, setFormCompleted] = useState(false) // !!! wäre eigentlich 'false' !!!
     const [victor, setVictor] = useState('nobody')
     const [paused, setPaused] = useState(false)
@@ -110,7 +110,7 @@ const App = () => {
 
     const resetEverything = () => {
         setFields(initialFieldState)
-        setMatchData(['White', 'Black', '360'])
+        setMatchData(['White', 'Black', '1'])
         setFormCompleted(false)
         setVictor('nobody')
         setPaused(false)
@@ -272,7 +272,6 @@ const App = () => {
     }
 
     const initMatch = (user1, user2, duration) => {
-        console.log(matchData)
         let newMatchData = []
         newMatchData.push(user1, user2, duration)
         setMatchData(newMatchData)
@@ -287,11 +286,19 @@ const App = () => {
         else resetEverything() // end game
     }
 
-    const defineVictor = (killedKingColor) => {
+    const defineVictor = (loserColor) => {
+        let newFields = fields
+        for(let i = 0; i < newFields.length; i++) {
+            let fieldRow = newFields[i];
+            for(let j = 0; j < fieldRow.length; j++) {
+                fieldRow[j].setMovable(false)
+                fieldRow[j].setHighlighted(false)
+            }
+        }
         setPaused(true)
         let victor
-        if(killedKingColor === 'white') victor = matchData[1]
-        else if(killedKingColor === 'black') victor = matchData[0]
+        if(loserColor === 'white') victor = matchData[1]
+        else if(loserColor === 'black') victor = matchData[0]
         setVictor(victor)
     }
 
@@ -314,6 +321,7 @@ const App = () => {
                 turn={turn}
                 movePiece={movePiece}
                 deadPieces={deadPieces}
+                defineVictor={defineVictor}
             />
         }
         {victor !== 'nobody' &&

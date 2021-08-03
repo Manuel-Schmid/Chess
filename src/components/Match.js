@@ -1,11 +1,9 @@
 import Board from "./Board";
-// import Countdown from "react-countdown";
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import {useRef, useState} from "react";
 import PieceIcon from "./PieceIcon";
 
-
-const Match = ({ matchData, startGame, started, fields, highlightSquare, showPause, paused, pauseMatch, turn, movePiece, deadPieces }) => {
+const Match = ({ matchData, startGame, started, fields, highlightSquare, showPause, paused, pauseMatch, turn, movePiece, deadPieces, defineVictor }) => {
     let player1 = matchData[0], player2 = matchData[1], time = matchData[2]
 
     const renderTime = ({ remainingTime }) => {
@@ -66,6 +64,10 @@ const Match = ({ matchData, startGame, started, fields, highlightSquare, showPau
         pauseMatch(!paused)
     }
 
+    const timeUp = (player) => {
+
+    }
+
     let key = 0;
 
     return (
@@ -93,10 +95,11 @@ const Match = ({ matchData, startGame, started, fields, highlightSquare, showPau
                     <div className={'center-content'}>
                         <h2>{player2}</h2>
                         <CountdownCircleTimer
+                            onComplete={() => defineVictor('black')}
                             size={150}
                             isPlaying={(started) && (turn === 'black') && (!paused)}
                             duration={time*60}
-                            colors={[["#004777", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
+                            colors={[["#191343", 0.33], ["#F7B801", 0.33], ["#dc143c"]]}
                         >
                             {renderTime}
                         </CountdownCircleTimer>
@@ -107,10 +110,11 @@ const Match = ({ matchData, startGame, started, fields, highlightSquare, showPau
                     <div className={'center-content'}>
                         <h2>{player1}</h2>
                         <CountdownCircleTimer
+                            onComplete={() => defineVictor('white')}
                             size={150}
                             isPlaying={(started) && (turn === 'white') && (!paused)}
                             duration={time*60}
-                            colors={[["#004777", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
+                            colors={[["#191343", 0.33], ["#F7B801", 0.33], ["#dc143c"]]} // 004777 191343
                         >
                             {renderTime}
                         </CountdownCircleTimer>
