@@ -4,6 +4,7 @@ class Field {
         this.y = y
         this.piece = piece
         this.highlighted = false
+        this.movable = false
     }
 
     setPiece(piece) {
@@ -28,6 +29,14 @@ class Field {
 
     setHighlighted(value) {
         this.highlighted = value;
+    }
+
+    getMovable() {
+        return this.movable;
+    }
+
+    setMovable(value) {
+        this.movable = value;
     }
 }
 

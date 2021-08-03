@@ -89,7 +89,7 @@ class Rook extends Piece {
             if (this.isBreak(possibleMoveList, pField)) break
         }
         for (let i = 1; i <= 7; i++) { // left
-            const pField = this.getField(fieldList, field.getX() - i, field.getY() + i)
+            const pField = this.getField(fieldList, field.getX() - i, field.getY())
             if (this.isBreak(possibleMoveList, pField)) break
         }
 
@@ -140,7 +140,7 @@ class Bishop extends Piece {
         console.log('Bishop')
         let possibleMoveList = []
 
-        
+
 
         return possibleMoveList
     }

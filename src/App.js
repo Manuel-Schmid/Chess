@@ -20,13 +20,6 @@ const App = () => {
     const [turn, setTurn] = useState('white')
     const [lastTurn, setLastTurn] = useState('nobody')
     // const [rerender, setRerender] = useState(false)
-    const [possibleMoveFields, setPossibleMoveFields] = useState(
-        [{
-            pX: 0,
-            pY: 0
-        }]
-    )
-
 
     const switchTurn = () => {
         let newFields
@@ -37,10 +30,10 @@ const App = () => {
             else if(turn === 'black') setTurn('white')
     }
 
-    const highLightPossibleMoves = (newFields, field, highlight) => {
+    const highLightPossibleMoves = (newFields, field, movable) => {
         const possibleMoves = field.getPiece().getMoves(newFields, field)
         for (const move of possibleMoves) {
-            changeHighlight(newFields, move.x, move.y, highlight)
+            changeMovable(newFields, move.x, move.y, movable)
         }
     }
 
@@ -50,6 +43,17 @@ const App = () => {
             for(let j = 0; j < fieldRow.length; j++) {
                 if(fieldRow[j].getX() === x && fieldRow[j].getY() === y) {
                     fieldRow[j].setHighlighted(highlight)
+                }
+            }
+        }
+    }
+
+    const changeMovable = (list, x, y, movable) => {
+        for(let i = 0; i < list.length; i++) {
+            let fieldRow = list[i];
+            for(let j = 0; j < fieldRow.length; j++) {
+                if(fieldRow[j].getX() === x && fieldRow[j].getY() === y) {
+                    fieldRow[j].setMovable(movable)
                 }
             }
         }
@@ -165,7 +169,9 @@ const App = () => {
         [
             new Field(1, 5, 'empty'),
             new Field(2, 5, 'empty'),
-            new Field(3, 5, 'empty'),
+            // new Field(3, 5, 'empty'),
+            new Field(3, 5, new Pieces.Rook('white', 'Rook')),
+
             new Field(4, 5, 'empty'),
             new Field(5, 5, 'empty'),
             new Field(6, 5, 'empty'),
