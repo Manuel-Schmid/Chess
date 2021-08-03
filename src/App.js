@@ -120,9 +120,6 @@ const App = () => {
     }
 
     const switchTurn = () => {
-        let newFields
-        newFields = resetLastHighlight(fields)
-        setFields(resetPossibleMoveHighlights(newFields))
         if(turn !== 'nobody')
             if(turn === 'white') setTurn('black')
             else if(turn === 'black') setTurn('white')
@@ -196,7 +193,7 @@ const App = () => {
 
         // update fields
         setFields(newFields)
-        setRerender(!rerender)
+        switchTurn()
     }
 
     const manageKilledPiece = (killedPiece) => {
@@ -299,7 +296,6 @@ const App = () => {
                 paused={paused}
                 pauseMatch={pauseMatch}
                 turn={turn}
-                switchTurn={switchTurn}
                 movePiece={movePiece}
                 deadPieces={deadPieces}
             />
