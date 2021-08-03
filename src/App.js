@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Match from "./components/Match";
 import {Field} from "./Field";
 import * as Pieces from "./Piece";
+import Victory from "./components/Victory";
 
 /* running the App:
  Terminal: npm start
@@ -98,6 +99,7 @@ const App = () => {
     const [fields, setFields] = useState(initialFieldState)
     const [matchData, setMatchData] = useState(['White', 'Black', '360'])
     const [formCompleted, setFormCompleted] = useState(false) // !!! wäre eigentlich 'false' !!!
+    const [victor, setVictor] = useState('nobody')
     const [paused, setPaused] = useState(false)
     const [started, setStarted] = useState(false)
     const [hlCoords, setHlCoords] = useState({ hX: 0, hY: 0 })
@@ -110,6 +112,7 @@ const App = () => {
         setFields(initialFieldState)
         setMatchData(['White', 'Black', '360'])
         setFormCompleted(false)
+        setVictor('nobody')
         setPaused(false)
         setStarted(false)
         setHlCoords({ hX: 0, hY: 0 })
@@ -202,6 +205,7 @@ const App = () => {
             if (killedPiece.getColor() === 'black') deadPieces[0].push(killedPiece)
             else deadPieces[1].push(killedPiece)
             setDeadPieces(newDeadPieces)
+            if (killedPiece.getName() === 'King') defineVictor(killedPiece.getColor())
         }
     }
 
@@ -283,9 +287,17 @@ const App = () => {
         else resetEverything() // end game
     }
 
+    const defineVictor = (killedKingColor) => {
+        setPaused(true)
+        let victor
+        if(killedKingColor === 'white') victor = matchData[1]
+        else if(killedKingColor === 'black') victor = matchData[0]
+        setVictor(victor)
+    }
+
     return (
     <div className="App">
-        <Header formCompleted={formCompleted}/>
+        <Header left={formCompleted}/>
         { !formCompleted && // Form
             <InitGame initMatch={initMatch}/>
         }
@@ -296,12 +308,16 @@ const App = () => {
                 started={started}
                 fields={fields}
                 highlightSquare={highlightSquare}
+                showPause={victor === 'nobody' && started}
                 paused={paused}
                 pauseMatch={pauseMatch}
                 turn={turn}
                 movePiece={movePiece}
                 deadPieces={deadPieces}
             />
+        }
+        {victor !== 'nobody' &&
+            <Victory victor={victor}/>
         }
     </div>
   );

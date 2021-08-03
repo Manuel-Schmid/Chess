@@ -5,7 +5,7 @@ import {useRef, useState} from "react";
 import PieceIcon from "./PieceIcon";
 
 
-const Match = ({ matchData, startGame, started, fields, highlightSquare, paused, pauseMatch, turn, movePiece, deadPieces }) => {
+const Match = ({ matchData, startGame, started, fields, highlightSquare, showPause, paused, pauseMatch, turn, movePiece, deadPieces }) => {
     let player1 = matchData[0], player2 = matchData[1], time = matchData[2]
 
     const renderTime = ({ remainingTime }) => {
@@ -54,8 +54,7 @@ const Match = ({ matchData, startGame, started, fields, highlightSquare, paused,
                     prevTime.current !== null && (
                     <div
                         key={prevTime.current}
-                        className={`time ${!isTimeUp ? "down" : ""}`}
-                    >
+                        className={`time ${!isTimeUp ? "down" : ""}`}>
                         {formatTime(prevTime.current)}
                     </div>
                 )}
@@ -103,7 +102,7 @@ const Match = ({ matchData, startGame, started, fields, highlightSquare, paused,
                         </CountdownCircleTimer>
                     </div>
                 </div>
-                <button onClick={pause} className={`pause-btn big-btn ${paused ? 'paused-btn' : ''}`}>{paused ? 'unpause' : 'pause'}</button>
+                <button onClick={pause} className={`pause-btn big-btn ${!showPause ? 'hidden' : ''} ${paused ? 'paused-btn' : ''}`}>{paused ? 'unpause' : 'pause'}</button>
                 <div className={'player-info'}>
                     <div className={'center-content'}>
                         <h2>{player1}</h2>

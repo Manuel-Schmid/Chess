@@ -114,7 +114,7 @@ body {
 }
 
 .started:hover {
-  background-color: darkred !important;
+  background-color: crimson !important;
 }
 
 .big-btn {
@@ -216,19 +216,35 @@ body {
   float: left;
   height: 100%;
   width: 12.5%;
+  position: relative;
 }
 
 .highlighted {
+  /*background-color: lightblue !important;*/
   background-color: lightblue !important;
 }
 
 .movable {
-  background-color: palevioletred !important;
   cursor: pointer;
 }
 
+.dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  height: 5vh;
+  width: 5vh;
+  background-color: #a4e284;
+  border-radius: 50%;
+  display: inline-block;
+}
+
 .kill {
-  background-color: #e35f2c !important;
+  background-color: crimson;
+  height: 9vh;
+  width: 9vh;
 }
 
 .row {
@@ -266,17 +282,18 @@ body {
 
 .white {
   /*color: rgb(242 242 242);*/
-  /*color: lightgoldenrodyellow;*/
-  color: #cece5d;
+  color: rgb(240 245 211);;
+  stroke: black;
+  stroke-width: 10px;
 }
 
 .icon-container {
   text-align: center;
   width: 100%;
   height: 100%;
+  position: absolute;
+  top: 0;
 }
-
-/* template */
 
 .timer-wrapper {
   display: flex;
@@ -323,4 +340,23 @@ body {
 .time-wrapper .time.down {
   opacity: 0;
   transform: translateY(100%);
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.victory-text {
+  text-align: center;
+  text-shadow: 4px 4px 2px black;
+  color: crimson;
+  width: 90vh;
+  font-size: 80px;
+  letter-spacing: 25px;
+  font-weight: bolder;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }

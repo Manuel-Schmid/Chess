@@ -14,11 +14,14 @@ const Square = ({ field, fieldNr, oddRow, highlightSquare, pieceSelectable, move
 
     return (
         <div
-            className={`square ${calcColor((oddRow === 'true'), isOdd(fieldNr))} ${pieceSelectable ? 'clickable':''} ${field.getHighlighted() ? 'highlighted':''} ${field.getMovable() ? 'movable':''} ${field.getMovable() && field.getPiece() !== 'empty' ? 'kill':''}`}
+            className={`square ${calcColor((oddRow === 'true'), isOdd(fieldNr))} ${pieceSelectable ? 'clickable':''} ${field.getHighlighted() ? 'highlighted':''} ${field.getMovable() ? 'movable':''}`}
             onClick={field.getMovable() ? () => movePiece(field.getX(), field.getY())
                 : pieceSelectable ? () => highlightSquare(field.getX(), field.getY())
                     : doNothing}>
             {/*{field.getX() + " | " + field.getY()} /!* delete this line !!!*!/*/}
+            {field.getMovable() &&
+                <span className={`dot ${field.getMovable() && field.getPiece() !== 'empty' ? 'kill' : ''}`} />
+            }
             {field.getPiece() !== 'empty' &&
                 <div
                     className={`icon-container ${pieceSelectable ? 'pieceSelectable' : ''}`}>
