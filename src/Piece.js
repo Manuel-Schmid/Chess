@@ -23,6 +23,64 @@ class Piece {
         return 'NA'
     }
 
+    isBreak(possibleMoveList, pField) { // not sure if this should be in here
+        if (pField !== 'NA') {
+            if (pField.getPiece() !== 'empty' && pField.getPiece().getColor() === this.getColor()) return true
+            possibleMoveList.push({x:pField.getX(), y:pField.getY()})
+            return pField.getPiece() !== 'empty';
+        } else return false
+    }
+
+    pushIfPossible(possibleMoveList, fieldList, x, y) {
+        const cField = this.getField(fieldList, x, y)
+        if (cField !== 'NA') {
+            if (cField.getPiece() !== 'empty') {
+                if (cField.getPiece().getColor() !== this.getColor()) {
+                    possibleMoveList.push({x: cField.getX(), y: cField.getY()})
+                }
+            } else {
+                possibleMoveList.push({x: cField.getX(), y: cField.getY()})
+            }
+        }
+    }
+
+    markDiagonals(fieldList, field, possibleMoveList) {
+        for (let i = 1; i <= 7; i++) { // up-right
+            const pField = this.getField(fieldList, field.getX() + i, field.getY() - i)
+            if (this.isBreak(possibleMoveList, pField)) break
+        }
+        for (let i = 1; i <= 7; i++) { // up-left
+            const pField = this.getField(fieldList, field.getX() - i, field.getY() - i)
+            if (this.isBreak(possibleMoveList, pField)) break
+        }
+        for (let i = 1; i <= 7; i++) { // down-right
+            const pField = this.getField(fieldList, field.getX() + i, field.getY() + i)
+            if (this.isBreak(possibleMoveList, pField)) break
+        }
+        for (let i = 1; i <= 7; i++) { // down-left
+            const pField = this.getField(fieldList, field.getX() - i, field.getY() + i)
+            if (this.isBreak(possibleMoveList, pField)) break
+        }
+    }
+
+    markStraights(fieldList, field, possibleMoveList) {
+        for (let i = 1; i <= 7; i++) { // up
+            const pField = this.getField(fieldList, field.getX(), field.getY() - i)
+            if (this.isBreak(possibleMoveList, pField)) break
+        }
+        for (let i = 1; i <= 7; i++) { // down
+            const pField = this.getField(fieldList, field.getX(), field.getY() + i)
+            if (this.isBreak(possibleMoveList, pField)) break
+        }
+        for (let i = 1; i <= 7; i++) { // right
+            const pField = this.getField(fieldList, field.getX() + i, field.getY())
+            if (this.isBreak(possibleMoveList, pField)) break
+        }
+        for (let i = 1; i <= 7; i++) { // left
+            const pField = this.getField(fieldList, field.getX() - i, field.getY())
+            if (this.isBreak(possibleMoveList, pField)) break
+        }
+    }
 }
 
 class Pawn extends Piece {
@@ -76,34 +134,12 @@ class Rook extends Piece {
         console.log('Rook')
         let possibleMoveList = []
 
-        for (let i = 1; i <= 7; i++) { // up
-            const pField = this.getField(fieldList, field.getX(), field.getY() - i)
-            if (this.isBreak(possibleMoveList, pField)) break
-        }
-        for (let i = 1; i <= 7; i++) { // down
-            const pField = this.getField(fieldList, field.getX(), field.getY() + i)
-            if (this.isBreak(possibleMoveList, pField)) break
-        }
-        for (let i = 1; i <= 7; i++) { // right
-            const pField = this.getField(fieldList, field.getX() + i, field.getY())
-            if (this.isBreak(possibleMoveList, pField)) break
-        }
-        for (let i = 1; i <= 7; i++) { // left
-            const pField = this.getField(fieldList, field.getX() - i, field.getY())
-            if (this.isBreak(possibleMoveList, pField)) break
-        }
+        this.markStraights(fieldList, field, possibleMoveList)
 
         return possibleMoveList
     }
-
-    isBreak(possibleMoveList, pField) { // not sure if this should be in here
-        if (pField !== 'NA') {
-            if (pField.getPiece() !== 'empty' && pField.getPiece().getColor() === this.getColor()) return true
-            possibleMoveList.push({x:pField.getX(), y:pField.getY()})
-            return pField.getPiece() !== 'empty';
-        } else return false
-    }
 }
+
 class Knight extends Piece {
     getMoves(fieldList, field) {
         console.log('Knight')
@@ -122,39 +158,31 @@ class Knight extends Piece {
         return possibleMoveList
     }
 
-    pushIfPossible(possibleMoveList, fieldList, x, y) {
-        const cField = this.getField(fieldList, x, y)
-        if (cField !== 'NA') {
-            if (cField.getPiece() !== 'empty') {
-                if (cField.getPiece().getColor() !== this.getColor()) {
-                    possibleMoveList.push({x: cField.getX(), y: cField.getY()})
-                }
-            } else {
-                possibleMoveList.push({x: cField.getX(), y: cField.getY()})
-            }
-        }
-    }
 }
+
 class Bishop extends Piece {
     getMoves(fieldList, field) {
         console.log('Bishop')
         let possibleMoveList = []
 
-
+        this.markDiagonals(fieldList, field, possibleMoveList);
 
         return possibleMoveList
     }
 }
+
 class Queen extends Piece {
     getMoves(fieldList, field) {
         console.log('Queen')
         let possibleMoveList = []
 
-
+        this.markStraights(fieldList, field, possibleMoveList);
+        this.markDiagonals(fieldList, field, possibleMoveList);
 
         return possibleMoveList
     }
 }
+
 class King extends Piece {
     getMoves(fieldList, field) {
         console.log('King')
@@ -172,19 +200,6 @@ class King extends Piece {
         this.pushIfPossible(possibleMoveList, fieldList, field.getX() - 1, field.getY() + 1)
 
         return possibleMoveList
-    }
-
-    pushIfPossible(possibleMoveList, fieldList, x, y) {
-        const cField = this.getField(fieldList, x, y)
-        if (cField !== 'NA') {
-            if (cField.getPiece() !== 'empty') {
-                if (cField.getPiece().getColor() !== this.getColor()) {
-                    possibleMoveList.push({x: cField.getX(), y: cField.getY()})
-                }
-            } else {
-                possibleMoveList.push({x: cField.getX(), y: cField.getY()})
-            }
-        }
     }
 }
 
