@@ -127,7 +127,6 @@ class Pawn extends Piece {
 
         return possibleMoveList
     }
-
 }
 
 class Rook extends Piece {

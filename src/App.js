@@ -178,7 +178,6 @@ const App = () => {
             for(let j = 0; j < fieldRow.length; j++) {
                 if(fieldRow[j].getX() === fromX && fieldRow[j].getY() === fromY) {
                     movingPiece = fieldRow[j].getPiece()
-                    if (movingPiece.getName() === 'Pawn' && movingPiece.getFirstMove()) movingPiece.setFirstMove(false)
                     fieldRow[j].setPiece('empty')
                 }
             }
@@ -190,6 +189,7 @@ const App = () => {
                     killedPiece = fieldRow[j].getPiece()
                     manageKilledPiece(killedPiece)
                     fieldRow[j].setPiece(movingPiece)
+                    if (movingPiece.getName() === 'Pawn') handleSpecialMoves(fieldRow[j], toX, toY) // handle special pawn-moves
                 }
             }
         }
@@ -197,6 +197,28 @@ const App = () => {
         // update fields
         setFields(newFields)
         switchTurn()
+    }
+
+    const handleSpecialMoves = (field, toX, toY) => {
+        let movingPiece = field.getPiece()
+        // first move
+        if (movingPiece.getFirstMove()) movingPiece.setFirstMove(false)
+        // promotion
+        if (toY === 1 && movingPiece.getColor() === 'white') promotePawn(movingPiece, toX, toY)
+        else if (toY === 8 && movingPiece.getColor() === 'black') promotePawn(movingPiece, toX, toY)
+    }
+
+    const promotePawn = (movingPiece, x, y) => {
+        let newFields = fields
+        for(let i = 0; i < newFields.length; i++) {
+            let fieldRow = newFields[i];
+            for(let j = 0; j < fieldRow.length; j++) {
+                if(fieldRow[j].getX() === x && fieldRow[j].getY() === y) {
+                    fieldRow[j].setPiece(new Pieces.Queen(movingPiece.getColor(), 'Queen'))
+                }
+            }
+        }
+        setFields(newFields)
     }
 
     const manageKilledPiece = (killedPiece) => {
@@ -286,16 +308,19 @@ const App = () => {
         else resetEverything() // end game
     }
 
-    const defineVictor = (loserColor) => {
-        let newFields = fields
-        for(let i = 0; i < newFields.length; i++) {
-            let fieldRow = newFields[i];
+    const freezeGame = () => {
+        for(let i = 0; i < fields.length; i++) {
+            let fieldRow = fields[i];
             for(let j = 0; j < fieldRow.length; j++) {
                 fieldRow[j].setMovable(false)
                 fieldRow[j].setHighlighted(false)
             }
         }
         setPaused(true)
+    }
+
+    const defineVictor = (loserColor) => {
+        freezeGame()
         let victor
         if(loserColor === 'white') victor = matchData[1]
         else if(loserColor === 'black') victor = matchData[0]

@@ -1,6 +1,6 @@
 import Square from "./Square";
 
-const Board = ({ fields, highlightSquare, turn, movePiece }) => {
+const Board = ({ fields, highlightSquare, turn, paused, movePiece }) => {
 
     let oddRow = true
     const changeRow = () => {
@@ -13,7 +13,7 @@ const Board = ({ fields, highlightSquare, turn, movePiece }) => {
 
     const getPieceSelectable = (field) => {
         if (field.getPiece() !== 'empty') {
-            return field.getPiece().getColor() === turn
+            return field.getPiece().getColor() === turn && !paused
         }
         return false
     }

@@ -89,7 +89,7 @@ const Match = ({ matchData, startGame, started, fields, highlightSquare, showPau
                     </div>
                 </div>
             </div>
-            <Board fields={fields} highlightSquare={highlightSquare} turn={turn} movePiece={movePiece} />
+            <Board fields={fields} highlightSquare={highlightSquare} turn={turn} paused={paused} movePiece={movePiece} />
             <div className={'clock-container'}>
                 <div className={'player-info'}>
                     <div className={'center-content'}>
