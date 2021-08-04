@@ -5,6 +5,7 @@ import Match from "./components/Match";
 import {Field} from "./Field";
 import * as Pieces from "./Piece";
 import Victory from "./components/Victory";
+import PromotionSelection from "./components/PromotionSelection";
 
 /* running the App:
  Terminal: npm start
@@ -102,6 +103,7 @@ const App = () => {
     const [victor, setVictor] = useState('nobody')
     const [paused, setPaused] = useState(false)
     const [started, setStarted] = useState(false)
+    const [fieldToPromote, setFieldToPromote] = useState({ x: 0, y: 0, color: 'none' })
     const [hlCoords, setHlCoords] = useState({ hX: 0, hY: 0 })
     const [turn, setTurn] = useState('nobody')
     const [lastTurn, setLastTurn] = useState('nobody')
@@ -115,7 +117,8 @@ const App = () => {
         setVictor('nobody')
         setPaused(false)
         setStarted(false)
-        setHlCoords({ hX: 0, hY: 0 })
+        setFieldToPromote({ x: 0, y: 0, color: 'none' })
+        setHlCoords({ x: 0, y: 0, color: 'none' })
         setTurn('nobody')
         setLastTurn('nobody')
         setDeadPieces([[], []])
@@ -204,23 +207,30 @@ const App = () => {
         // first move
         if (movingPiece.getFirstMove()) movingPiece.setFirstMove(false)
         // promotion
-        if (toY === 1 && movingPiece.getColor() === 'white') promotePawn(movingPiece, toX, toY)
-        else if (toY === 8 && movingPiece.getColor() === 'black') promotePawn(movingPiece, toX, toY)
+        if (toY === 1 && movingPiece.getColor() === 'white') showPromotionSelection(movingPiece, toX, toY)
+        else if (toY === 8 && movingPiece.getColor() === 'black') showPromotionSelection(movingPiece, toX, toY)
     }
 
-    const promotePawn = (movingPiece, x, y) => {
+    const showPromotionSelection = (movingPiece, x, y) => {
+        freezeGame()
+        setFieldToPromote({ x: x, y: y, color: movingPiece.getColor() })
+    }
+
+    const promotePawn = (piece) => {
         let newFields = fields
         for(let i = 0; i < newFields.length; i++) {
             let fieldRow = newFields[i];
             for(let j = 0; j < fieldRow.length; j++) {
-                if(fieldRow[j].getX() === x && fieldRow[j].getY() === y) {
-                    fieldRow[j].setPiece(new Pieces.Queen(movingPiece.getColor(), 'Queen'))
+                if(fieldRow[j].getX() === fieldToPromote.x && fieldRow[j].getY() === fieldToPromote.y) {
+                    fieldRow[j] = new Field(fieldToPromote.x, fieldToPromote.y, piece)
                 }
             }
         }
         setFields(newFields)
+        setFieldToPromote({ x: 0, y: 0, color: 'none' })
+        setPaused(false)
     }
-
+    
     const manageKilledPiece = (killedPiece) => {
         if (killedPiece !== 'empty') {
             let newDeadPieces = deadPieces
@@ -281,7 +291,6 @@ const App = () => {
             })
             // highlight possible fields
             highLightPossibleMoves(newFields, getField(newFields, x, y), true)
-
         } else {
             changeHighlight(newFields, x, y, false) // already highlighted
             setHlCoords({
@@ -351,6 +360,9 @@ const App = () => {
         }
         {victor !== 'nobody' &&
             <Victory victor={victor}/>
+        }
+        {victor === 'nobody' && (fieldToPromote.x !== 0 || fieldToPromote.y !== 0 || fieldToPromote.color !== 'none') &&
+            <PromotionSelection promotePawn={promotePawn} pieceColor={fieldToPromote.color} />
         }
     </div>
   );

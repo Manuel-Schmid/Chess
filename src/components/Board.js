@@ -13,6 +13,7 @@ const Board = ({ fields, highlightSquare, turn, paused, movePiece }) => {
 
     const getPieceSelectable = (field) => {
         if (field.getPiece() !== 'empty') {
+            console.log(field.getPiece())
             return field.getPiece().getColor() === turn && !paused
         }
         return false

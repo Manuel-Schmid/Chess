@@ -43,7 +43,7 @@ const InitGame = ({ initMatch }) => {
             </div>
             <div className={'form-control'}>
                 <label>Time per player</label>
-                <select id={'time'} name="time-select">
+                <select id={'time'} name="option-select">
                     <option value="360">360 minutes</option>
                     <option value="200">200 minutes</option>
                     <option value="100">100 minutes</option>
