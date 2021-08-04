@@ -26,7 +26,7 @@ const InitGame = ({ initMatch }) => {
     return (
         <form className={'init-form'} onSubmit={onSubmit}>
             <div className={'form-control'}>
-                <label>Player 1</label>
+                <label>Player 1 (White)</label>
                 <input
                     id={'player1'}
                     type={'text'}
@@ -34,7 +34,7 @@ const InitGame = ({ initMatch }) => {
                 />
             </div>
             <div className={'form-control'}>
-                <label>Player 2</label>
+                <label>Player 2 (Black)</label>
                 <input
                     id={'player2'}
                     type={'text'}

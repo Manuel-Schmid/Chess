@@ -136,12 +136,17 @@ body {
 }
 
 .clock-container {
+  position: relative;
   height: 100vh;
   width: calc(100vw - (50vw + 45vh));
+  background-color: white;
   text-align: center;
   float: left;
 }
 
+.front {
+  z-index: 10;
+}
 
 .player-info {
    height: 45vh;
@@ -157,12 +162,6 @@ body {
   text-align: center;
   float: left;
 }
-
-/*@media (min-width: 1800px) {*/
-/*  .death-pool {*/
-/*    margin-left: 19vw;*/
-/*  }*/
-/*}*/
 
 .dead-pieces-container {
   float: right;
@@ -432,4 +431,34 @@ body {
   text-decoration: none;
   font-size: 15px;
   font-family: inherit;
+}
+
+.width-auto {
+  width: auto !important;
+}
+
+.interaction-container {
+  background-color: white;
+  height: 100vh;
+  width: calc(100vw - (50vw + 45vh));
+  position: absolute;
+  text-align: center;
+  bottom: 0;
+  right: 0;
+}
+
+.settings {
+  z-index: 11;
+  position: absolute;
+  bottom: 5px;
+  right: 25px;
+  font-size: 5vh;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
 }

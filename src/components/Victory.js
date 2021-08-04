@@ -1,7 +1,7 @@
 const Victory = ({ victor }) => {
     return (
         <div className={'victory-text'}>
-            {victor} has won!!!
+            {victor === 'draw' ? 'Draw !!!' : `${victor} has won!!!`}
         </div>
     )
 }

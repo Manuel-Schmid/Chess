@@ -2,9 +2,12 @@ import Board from "./Board";
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import {useRef, useState} from "react";
 import PieceIcon from "./PieceIcon";
+import MatchInteraction from "./MatchInteraction";
 
-const Match = ({ matchData, startGame, started, fields, highlightSquare, showPause, paused, pauseMatch, turn, movePiece, deadPieces, defineVictor }) => {
+const Match = ({ matchData, startGame, started, fields, highlightSquare, showButtons, paused, pauseMatch, turn, movePiece, deadPieces, defineVictor }) => {
     let player1 = matchData[0], player2 = matchData[1], time = matchData[2]
+    const [showMatchInteraction, setShowMatchInteraction] = useState(false)
+
 
     const renderTime = ({ remainingTime }) => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -64,10 +67,6 @@ const Match = ({ matchData, startGame, started, fields, highlightSquare, showPau
         pauseMatch(!paused)
     }
 
-    const timeUp = (player) => {
-
-    }
-
     let key = 0;
 
     return (
@@ -90,7 +89,7 @@ const Match = ({ matchData, startGame, started, fields, highlightSquare, showPau
                 </div>
             </div>
             <Board fields={fields} highlightSquare={highlightSquare} turn={turn} paused={paused} movePiece={movePiece} />
-            <div className={'clock-container'}>
+            <div className={`clock-container ${showMatchInteraction ? '' : 'front'}`}>
                 <div className={'player-info'}>
                     <div className={'center-content'}>
                         <h2>{player2}</h2>
@@ -105,7 +104,7 @@ const Match = ({ matchData, startGame, started, fields, highlightSquare, showPau
                         </CountdownCircleTimer>
                     </div>
                 </div>
-                <button onClick={pause} className={`pause-btn big-btn ${!showPause ? 'hidden' : ''} ${paused ? 'paused-btn' : ''}`}>{paused ? 'unpause' : 'pause'}</button>
+                <button onClick={pause} className={`pause-btn big-btn ${!showButtons ? 'hidden' : ''} ${paused ? 'paused-btn' : ''}`}>{paused ? 'unpause' : 'pause'}</button>
                 <div className={'player-info'}>
                     <div className={'center-content'}>
                         <h2>{player1}</h2>
@@ -121,6 +120,14 @@ const Match = ({ matchData, startGame, started, fields, highlightSquare, showPau
                     </div>
                 </div>
             </div>
+            <MatchInteraction
+                started={started}
+                showButtons={showButtons}
+                showMatchInteraction={showMatchInteraction}
+                setShowMatchInteraction={setShowMatchInteraction}
+                pauseMatch={pauseMatch}
+                defineVictor={defineVictor}
+            />
         </div>
     )
 }

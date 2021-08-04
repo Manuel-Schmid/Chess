@@ -261,7 +261,7 @@ const App = () => {
             let newFields = fields
             newFields = resetLastHighlight(newFields)
             setFields(resetPossibleMoveHighlights(newFields))
-            setLastTurn(turn)
+            if (turn !== 'nobody') setLastTurn(turn)
             setTurn('nobody')
         } else { // Match geht weiter
             setTurn(lastTurn)
@@ -328,11 +328,12 @@ const App = () => {
         setPaused(true)
     }
 
-    const defineVictor = (loserColor) => {
+    const defineVictor = (loser) => {
         freezeGame()
         let victor
-        if(loserColor === 'white') victor = matchData[1]
-        else if(loserColor === 'black') victor = matchData[0]
+        if(loser === 'draw') victor = 'draw'
+        else if(loser === 'white') victor = matchData[1]
+        else if(loser === 'black') victor = matchData[0]
         setVictor(victor)
     }
 
@@ -349,7 +350,7 @@ const App = () => {
                 started={started}
                 fields={fields}
                 highlightSquare={highlightSquare}
-                showPause={victor === 'nobody' && started}
+                showButtons={victor === 'nobody' && started}
                 paused={paused}
                 pauseMatch={pauseMatch}
                 turn={turn}

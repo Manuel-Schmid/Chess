@@ -1,4 +1,4 @@
-import {FaChessPawn, FaChessBishop, FaChessKnight, FaChessQueen, FaChessRook, FaArrowRight} from "react-icons/fa";
+import {FaArrowRight} from "react-icons/fa";
 import * as Pieces from "../Piece";
 import PieceIcon from "./PieceIcon";
 import {useState} from "react";
@@ -6,22 +6,6 @@ import {useState} from "react";
 const PromotionSelection = ({ promotePawn, pieceColor }) => {
 
     const [selection, setSelection] = useState('Queen')
-
-    // function getSelectedPiece() {
-    //     switch(document.getElementById('promotion').value) {
-    //         case 'Queen':
-    //             return new Pieces.Queen(pieceColor, 'Queen')
-    //         case 'Knight':
-    //             return new Pieces.Knight(pieceColor, 'Knight')
-    //         case 'Bishop':
-    //             return new Pieces.Bishop(pieceColor, 'Bishop')
-    //         case 'Rook':
-    //             return new Pieces.Rook(pieceColor, 'Rook')
-    //         default:
-    //             console.log('error')
-    //             break;
-    //     }
-    // }
 
     const getSelectedPiece = () => {
         switch(document.getElementById('promotion').value) {
