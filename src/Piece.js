@@ -83,6 +83,11 @@ class Piece {
             if (this.isBreak(possibleMoveList, pField)) break
         }
     }
+
+    getPossibleEnemyMovesCount(fields, color) {
+        let king = new King(color, 'King')
+        return king.getEveryPossibleEnemyMove(fields, true).length
+    }
 }
 
 class Pawn extends Piece {
@@ -248,7 +253,7 @@ class King extends Piece {
                         }
                     }
 
-                    everyPossibleMove = this.getEveryPossibleMove(newFields)
+                    everyPossibleMove = this.getEveryPossibleEnemyMove(newFields, false)
                 }
             }
 
@@ -267,14 +272,14 @@ class King extends Piece {
         }
     }
 
-    getEveryPossibleMove(fields) {
+    getEveryPossibleEnemyMove(fields, checkForCheck) {
         let everyPossibleMove = []
         for(let i = 0; i < fields.length; i++) {
             let fieldRow = fields[i];
             for(let j = 0; j < fieldRow.length; j++) {
                 if (fieldRow[j].getPiece() !== 'empty' && fieldRow[j].getPiece().getColor() !== this.getColor()) {
                     let possibleMoves
-                    if (fieldRow[j].getPiece().getName() === 'King') possibleMoves = fieldRow[j].getPiece().getMoves(fields, fieldRow[j], false)
+                    if (fieldRow[j].getPiece().getName() === 'King') possibleMoves = fieldRow[j].getPiece().getMoves(fields, fieldRow[j], checkForCheck)
                     else possibleMoves = fieldRow[j].getPiece().getMoves(fields, fieldRow[j])
                     everyPossibleMove.push(...possibleMoves)
                 }

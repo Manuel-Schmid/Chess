@@ -105,6 +105,7 @@ const App = () => {
     const [started, setStarted] = useState(false)
     const [fieldToPromote, setFieldToPromote] = useState({ x: 0, y: 0, color: 'none' })
     const [hlCoords, setHlCoords] = useState({ hX: 0, hY: 0 })
+    const [possibleMoveCounts, setPossibleMoveCounts] = useState({ white: 20, black: 20 })
     const [turn, setTurn] = useState('nobody')
     const [lastTurn, setLastTurn] = useState('nobody')
     const [deadPieces, setDeadPieces] = useState([[], []])
@@ -119,6 +120,7 @@ const App = () => {
         setStarted(false)
         setFieldToPromote({ x: 0, y: 0, color: 'none' })
         setHlCoords({ x: 0, y: 0, color: 'none' })
+        setPossibleMoveCounts({ white: 20, black: 20 })
         setTurn('nobody')
         setLastTurn('nobody')
         setDeadPieces([[], []])
@@ -194,10 +196,20 @@ const App = () => {
                     killedPiece = fieldRow[j].getPiece()
                     manageKilledPiece(killedPiece)
                     fieldRow[j].setPiece(movingPiece)
-                    if (movingPiece.getName() === 'Pawn') handleSpecialMoves(fieldRow[j], toX, toY) // handle special pawn-moves
+                    if (movingPiece.getName() === 'Pawn') handleSpecialMoves(fieldRow[j], toX, toY)
                 }
             }
         }
+
+        // update possible-move-count
+        let newPossibleMoveCounts = possibleMoveCounts
+        newPossibleMoveCounts.white = new Pieces.Pawn('white', 'Pawn').getPossibleEnemyMovesCount(newFields, 'black')
+        newPossibleMoveCounts.black = new Pieces.Pawn('white', 'Pawn').getPossibleEnemyMovesCount(newFields, 'white')
+        setPossibleMoveCounts(newPossibleMoveCounts)
+
+        // check if no move is possible
+        if (possibleMoveCounts.white === 0) defineVictor('white')
+        else if (possibleMoveCounts.black === 0) defineVictor('black')
 
         // update fields
         setFields(newFields)
@@ -355,6 +367,7 @@ const App = () => {
                 showButtons={victor === 'nobody' && started}
                 paused={paused}
                 pauseMatch={pauseMatch}
+                possibleMoveCount={possibleMoveCounts}
                 turn={turn}
                 movePiece={movePiece}
                 deadPieces={deadPieces}

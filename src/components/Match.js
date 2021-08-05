@@ -4,7 +4,7 @@ import {useRef, useState} from "react";
 import PieceIcon from "./PieceIcon";
 import MatchInteraction from "./MatchInteraction";
 
-const Match = ({ matchData, startGame, started, fields, highlightSquare, showButtons, paused, pauseMatch, turn, movePiece, deadPieces, defineVictor }) => {
+const Match = ({ matchData, startGame, started, fields, highlightSquare, showButtons, paused, pauseMatch, turn, possibleMoveCount, movePiece, deadPieces, defineVictor }) => {
     let player1 = matchData[0], player2 = matchData[1], time = matchData[2]
     const [showMatchInteraction, setShowMatchInteraction] = useState(false)
 
@@ -71,6 +71,12 @@ const Match = ({ matchData, startGame, started, fields, highlightSquare, showBut
 
     return (
         <div className={'match'}>
+            <div className={'move-count-container move-count-container-top'}>
+                <p>Possible Moves: <b>{possibleMoveCount.black}</b></p>
+            </div>
+            <div className={'move-count-container move-count-container-bottom'}>
+                <p>Possible Moves: <b>{possibleMoveCount.white}</b></p>
+            </div>
             <div className={'death-container'}>
                 <div className={'death-pool player-info'}>
                     <div className={'dead-pieces-container top'}>
