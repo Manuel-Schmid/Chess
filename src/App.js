@@ -98,8 +98,8 @@ const App = () => {
         ]
 
     const [fields, setFields] = useState(initialFieldState)
-    const [matchData, setMatchData] = useState(['White', 'Black', '1'])
-    const [formCompleted, setFormCompleted] = useState(false) // !!! wäre eigentlich 'false' !!!
+    const [matchData, setMatchData] = useState(['White', 'Black', '100'])
+    const [formCompleted, setFormCompleted] = useState(true) // !!! wäre eigentlich 'false' !!!
     const [victor, setVictor] = useState('nobody')
     const [paused, setPaused] = useState(false)
     const [started, setStarted] = useState(false)
@@ -132,7 +132,9 @@ const App = () => {
     }
 
     const highLightPossibleMoves = (newFields, field, movable) => {
-        const possibleMoves = field.getPiece().getMoves(newFields, field)
+        let possibleMoves
+        if (field.getPiece().getName() === 'King') possibleMoves = field.getPiece().getMoves(newFields, field, true)
+        else possibleMoves = field.getPiece().getMoves(newFields, field)
         for (const move of possibleMoves) {
             changeMovable(newFields, move.x, move.y, movable)
         }

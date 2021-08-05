@@ -1,3 +1,5 @@
+import {Field} from "./Field";
+
 class Piece {
     constructor(color, name) {
         this.color = color;
@@ -179,21 +181,106 @@ class Queen extends Piece {
 }
 
 class King extends Piece {
-    getMoves(fieldList, field) {
+    getMoves(fieldList, field, checkForCheck) { // , checkForCheck
         let possibleMoveList = []
 
         // one square in every direction
-        this.pushIfPossible(possibleMoveList, fieldList, field.getX(), field.getY() - 1)
-        this.pushIfPossible(possibleMoveList, fieldList, field.getX(), field.getY())
-        this.pushIfPossible(possibleMoveList, fieldList, field.getX(), field.getY() + 1)
-        this.pushIfPossible(possibleMoveList, fieldList, field.getX() + 1, field.getY() -1)
-        this.pushIfPossible(possibleMoveList, fieldList, field.getX() + 1, field.getY())
-        this.pushIfPossible(possibleMoveList, fieldList, field.getX() + 1, field.getY() + 1)
-        this.pushIfPossible(possibleMoveList, fieldList, field.getX() - 1, field.getY() - 1)
-        this.pushIfPossible(possibleMoveList, fieldList, field.getX() - 1, field.getY())
-        this.pushIfPossible(possibleMoveList, fieldList, field.getX() - 1, field.getY() + 1)
+        this.pushIfNotCheck(possibleMoveList, fieldList, field.getX(), field.getY() - 1, field, checkForCheck)
+        this.pushIfNotCheck(possibleMoveList, fieldList, field.getX(), field.getY() + 1, field, checkForCheck)
+        this.pushIfNotCheck(possibleMoveList, fieldList, field.getX() + 1, field.getY() -1, field, checkForCheck)
+        this.pushIfNotCheck(possibleMoveList, fieldList, field.getX() + 1, field.getY(), field, checkForCheck)
+        this.pushIfNotCheck(possibleMoveList, fieldList, field.getX() + 1, field.getY() + 1, field, checkForCheck)
+        this.pushIfNotCheck(possibleMoveList, fieldList, field.getX() - 1, field.getY() - 1, field, checkForCheck)
+        this.pushIfNotCheck(possibleMoveList, fieldList, field.getX() - 1, field.getY(), field, checkForCheck)
+        this.pushIfNotCheck(possibleMoveList, fieldList, field.getX() - 1, field.getY() + 1, field, checkForCheck)
 
         return possibleMoveList
+    }
+
+    deepCopy2dArray(currentArray) {
+        let newArray = [];
+        let newArrayRow = [];
+
+        for(let i = 0; i < currentArray.length; i++) {
+            let fieldRow = currentArray[i];
+            newArrayRow = []
+            for(let j = 0; j < fieldRow.length; j++) {
+                newArrayRow.push(new Field(fieldRow[j].getX(), fieldRow[j].getY(), fieldRow[j].getPiece()))
+            }
+            newArray.push(newArrayRow)
+        }
+        return newArray
+    }
+
+    // King cannot move somewhere where he is in check
+
+    pushIfNotCheck(possibleMoveList, fieldList, x, y, fromField, checkForCheck) {
+        const cField = this.getField(fieldList, x, y)
+        if (cField !== 'NA') {
+
+            let everyPossibleMove = []
+
+            if (checkForCheck) {
+                let newFields = this.deepCopy2dArray(fieldList)
+                let movePossible = false
+
+                let killedPiece
+                for(let i = 0; i < newFields.length; i++) {
+                    let fieldRow = newFields[i];
+                    for(let j = 0; j < fieldRow.length; j++) {
+                        if(fieldRow[j].getX() === x && fieldRow[j].getY() === y) {
+                            if (fieldRow[j].getPiece() === 'empty' || (fieldRow[j].getPiece() !== 'empty' && fieldRow[j].getPiece().getColor() !== this.getColor())) {
+                                movePossible = true
+                                killedPiece = fieldRow[j].getPiece()
+                                fieldRow[j].setPiece(this)
+                            }
+                        }
+                    }
+                }
+
+                if (movePossible) {
+                    for(let i = 0; i < newFields.length; i++) {
+                        let fieldRow = newFields[i];
+                        for(let j = 0; j < fieldRow.length; j++) {
+                            if(fieldRow[j].getX() === fromField.getX() && fieldRow[j].getY() === fromField.getY()) {
+                                fieldRow[j].setPiece(killedPiece)
+                            }
+                        }
+                    }
+
+                    everyPossibleMove = this.getEveryPossibleMove(newFields)
+                }
+            }
+
+            // return if check
+            for (const move of everyPossibleMove) {
+                if (move.x === x && move.y === y) return
+            }
+
+            if (cField.getPiece() !== 'empty') {
+                if (cField.getPiece().getColor() !== this.getColor()) {
+                    possibleMoveList.push({x: cField.getX(), y: cField.getY()})
+                }
+            } else {
+                possibleMoveList.push({x: cField.getX(), y: cField.getY()})
+            }
+        }
+    }
+
+    getEveryPossibleMove(fields) {
+        let everyPossibleMove = []
+        for(let i = 0; i < fields.length; i++) {
+            let fieldRow = fields[i];
+            for(let j = 0; j < fieldRow.length; j++) {
+                if (fieldRow[j].getPiece() !== 'empty' && fieldRow[j].getPiece().getColor() !== this.getColor()) {
+                    let possibleMoves
+                    if (fieldRow[j].getPiece().getName() === 'King') possibleMoves = fieldRow[j].getPiece().getMoves(fields, fieldRow[j], false)
+                    else possibleMoves = fieldRow[j].getPiece().getMoves(fields, fieldRow[j])
+                    everyPossibleMove.push(...possibleMoves)
+                }
+            }
+        }
+        return everyPossibleMove
     }
 }
 
