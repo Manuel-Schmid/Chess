@@ -18,6 +18,7 @@ const Square = ({ field, fieldNr, oddRow, highlightSquare, pieceSelectable, move
             onClick={field.getMovable() ? () => movePiece(field.getX(), field.getY())
                 : pieceSelectable ? () => highlightSquare(field.getX(), field.getY())
                     : doNothing}>
+            {/*{field.getX() + "|" + field.getY()}*/}
             {field.getMovable() &&
                 <span className={`dot ${field.getMovable() && field.getPiece() !== 'empty' ? 'kill' : ''}`} />
             }

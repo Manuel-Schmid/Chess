@@ -229,14 +229,12 @@ class King extends Piece {
                 let newFields = this.deepCopy2dArray(fieldList)
                 let movePossible = false
 
-                let killedPiece
                 for(let i = 0; i < newFields.length; i++) {
                     let fieldRow = newFields[i];
                     for(let j = 0; j < fieldRow.length; j++) {
                         if(fieldRow[j].getX() === x && fieldRow[j].getY() === y) {
                             if (fieldRow[j].getPiece() === 'empty' || (fieldRow[j].getPiece() !== 'empty' && fieldRow[j].getPiece().getColor() !== this.getColor())) {
                                 movePossible = true
-                                killedPiece = fieldRow[j].getPiece()
                                 fieldRow[j].setPiece(this)
                             }
                         }
@@ -248,11 +246,10 @@ class King extends Piece {
                         let fieldRow = newFields[i];
                         for(let j = 0; j < fieldRow.length; j++) {
                             if(fieldRow[j].getX() === fromField.getX() && fieldRow[j].getY() === fromField.getY()) {
-                                fieldRow[j].setPiece(killedPiece)
+                                fieldRow[j].setPiece('empty')
                             }
                         }
                     }
-
                     everyPossibleMove = this.getEveryPossibleEnemyMove(newFields, false)
                 }
             }

@@ -99,7 +99,7 @@ const App = () => {
 
     const [fields, setFields] = useState(initialFieldState)
     const [matchData, setMatchData] = useState(['White', 'Black', '100'])
-    const [formCompleted, setFormCompleted] = useState(true) // !!! wäre eigentlich 'false' !!!
+    const [formCompleted, setFormCompleted] = useState(false) // !!! wäre eigentlich 'false' !!!
     const [victor, setVictor] = useState('nobody')
     const [paused, setPaused] = useState(false)
     const [started, setStarted] = useState(false)
@@ -112,25 +112,27 @@ const App = () => {
     // const [rerender, setRerender] = useState(false) // not optimal
 
     const resetEverything = () => {
-        setFields(initialFieldState)
-        setMatchData(['White', 'Black', '1'])
+        window.location.reload();
+        // setFields(initialFieldState)
+        // setMatchData(['White', 'Black', '100'])
         setFormCompleted(false)
-        setVictor('nobody')
-        setPaused(false)
-        setStarted(false)
-        setFieldToPromote({ x: 0, y: 0, color: 'none' })
-        setHlCoords({ x: 0, y: 0, color: 'none' })
-        setPossibleMoveCounts({ white: 20, black: 20 })
-        setTurn('nobody')
-        setLastTurn('nobody')
-        setDeadPieces([[], []])
+        // setVictor('nobody')
+        // setPaused(false)
+        // setStarted(false)
+        // setFieldToPromote({ x: 0, y: 0, color: 'none' })
+        // setHlCoords({ x: 0, y: 0, color: 'none' })
+        // setPossibleMoveCounts({ white: 20, black: 20 })
+        // setTurn('nobody')
+        // setLastTurn('nobody')
+        // setDeadPieces([[], []])
         // setRerender(false)
     }
 
     const switchTurn = () => {
-        if(turn !== 'nobody')
-            if(turn === 'white') setTurn('black')
-            else if(turn === 'black') setTurn('white')
+        if(turn !== 'nobody') {
+            if (turn === 'white') setTurn('black')
+            else if (turn === 'black') setTurn('white')
+        }
     }
 
     const highLightPossibleMoves = (newFields, field, movable) => {
@@ -201,13 +203,29 @@ const App = () => {
             }
         }
 
+        // bare king rules trigger a draw
+        if (deadPieces[0].length === 15 && deadPieces[1].length === 15) defineVictor('draw')
+        if (deadPieces[0].length + deadPieces[1].length === 29) { // only 3 pieces left alive
+            for(let i = 0; i < newFields.length; i++) {
+                let fieldRow = newFields[i];
+                for(let j = 0; j < fieldRow.length; j++) {
+                    if (fieldRow[j].getPiece() !== 'empty' ) {
+                        if (fieldRow[j].getPiece().getName() === 'Bishop' || fieldRow[j].getPiece().getName() === 'Knight') {
+                            defineVictor('draw')
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         // update possible-move-count
         let newPossibleMoveCounts = possibleMoveCounts
         newPossibleMoveCounts.white = new Pieces.Pawn('white', 'Pawn').getPossibleEnemyMovesCount(newFields, 'black')
         newPossibleMoveCounts.black = new Pieces.Pawn('white', 'Pawn').getPossibleEnemyMovesCount(newFields, 'white')
         setPossibleMoveCounts(newPossibleMoveCounts)
 
-        // check if no move is possible
+        // check if no move is possible (stalemate)
         if (possibleMoveCounts.white === 0) defineVictor('white')
         else if (possibleMoveCounts.black === 0) defineVictor('black')
 
@@ -328,7 +346,9 @@ const App = () => {
             setTurn('white')
             setStarted(true)
         }
-        else resetEverything() // end game
+        else {
+            resetEverything()
+        } // end game
     }
 
     const freezeGame = () => {
