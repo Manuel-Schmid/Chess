@@ -116,7 +116,7 @@ const App = () => {
         // setFields(initialFieldState)
         // setMatchData(['White', 'Black', '100'])
         setFormCompleted(false)
-        // setVictor('nobody')
+        setVictor('nobody')
         // setPaused(false)
         // setStarted(false)
         // setFieldToPromote({ x: 0, y: 0, color: 'none' })
