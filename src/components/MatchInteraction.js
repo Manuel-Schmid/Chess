@@ -10,13 +10,13 @@ const MatchInteraction = ({ started, showButtons, showMatchInteraction, language
     const handleInteraction = (interaction) => {
         switch (interaction) {
             case 'black-resign' :
-                defineVictor('black')
+                defineVictor('black', true)
                 break;
             case 'white-resign' :
-                defineVictor('white')
+                defineVictor('white', true)
                 break;
             case 'draw' :
-                defineVictor('draw')
+                defineVictor('draw', false)
                 break;
             default:
                 break;

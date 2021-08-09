@@ -9,6 +9,7 @@ const Match = ({ matchData, language, startGame, started, fields, highlightSquar
     let player1 = matchData[0], player2 = matchData[1], time = matchData[2]
     const [showMatchInteraction, setShowMatchInteraction] = useState(false)
     const [showClockTime, setShowClockTime] = useState(true)
+    const [resignedColor, setResignedColor] = useState('none')
 
     const onClockClick = () => {
         setShowClockTime(!showClockTime)
@@ -68,6 +69,13 @@ const Match = ({ matchData, language, startGame, started, fields, highlightSquar
         );
     }
 
+    const crownVictor = (loser, resignation) => {
+        defineVictor(loser)
+        if (resignation) {
+            setResignedColor(loser)
+        }
+    }
+
     const pause = () => {
         pauseMatch(!paused)
     }
@@ -99,7 +107,7 @@ const Match = ({ matchData, language, startGame, started, fields, highlightSquar
                     </div>
                 </div>
             </div>
-            <Board fields={fields} highlightSquare={highlightSquare} turn={turn} paused={paused} movePiece={movePiece} />
+            <Board fields={fields} highlightSquare={highlightSquare} turn={turn} paused={paused} movePiece={movePiece} resignedColor={resignedColor} />
             <div className={`clock-container ${showMatchInteraction ? '' : 'front'}`}>
                 <div className={'player-info'}>
                     <div className={'center-content'}>
@@ -142,7 +150,7 @@ const Match = ({ matchData, language, startGame, started, fields, highlightSquar
                 language={language}
                 setShowMatchInteraction={setShowMatchInteraction}
                 pauseMatch={pauseMatch}
-                defineVictor={defineVictor}
+                defineVictor={crownVictor}
             />
         </div>
     )

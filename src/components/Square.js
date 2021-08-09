@@ -1,6 +1,6 @@
 import PieceIcon from "./PieceIcon";
 
-const Square = ({ field, fieldNr, oddRow, highlightSquare, pieceSelectable, movePiece }) => {
+const Square = ({ field, fieldNr, oddRow, highlightSquare, pieceSelectable, movePiece, resigned }) => {
     const isOdd = (num) => {
         return !(num % 2 === 0);
     }
@@ -25,7 +25,7 @@ const Square = ({ field, fieldNr, oddRow, highlightSquare, pieceSelectable, move
             }
             {field.getPiece() !== 'empty' &&
                 <div
-                    className={`icon-container ${pieceSelectable ? 'pieceSelectable' : ''}`}>
+                    className={`icon-container ${pieceSelectable ? 'pieceSelectable' : ''} ${resigned ? 'rotate' : ''}`}>
                     <PieceIcon
                         piece={field.getPiece().getName()}
                         color={field.getPiece().getColor()}/>

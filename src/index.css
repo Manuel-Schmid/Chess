@@ -225,6 +225,11 @@ body {
   background-color: lightblue !important;
 }
 
+.rotate {
+  transform: rotate(90deg);
+  transition: all 0.5s;
+}
+
 .inCheck {
   background-color: #f32159 !important;
 }

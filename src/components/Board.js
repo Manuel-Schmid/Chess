@@ -1,6 +1,6 @@
 import Square from "./Square";
 
-const Board = ({ fields, highlightSquare, turn, paused, movePiece }) => {
+const Board = ({ fields, highlightSquare, turn, paused, movePiece, resignedColor }) => {
 
     let oddRow = true
     const changeRow = () => {
@@ -18,6 +18,13 @@ const Board = ({ fields, highlightSquare, turn, paused, movePiece }) => {
         return false
     }
 
+    const getKingResigned = (field) => {
+        if (resignedColor !== 'none') {
+            return (field.getPiece() !== 'empty' && field.getPiece().getName() === 'King' && field.getPiece().getColor() === resignedColor)
+        }
+        return false
+    }
+
     return (
         <div className="board">
             {fields.map((innerArray) => (
@@ -31,6 +38,7 @@ const Board = ({ fields, highlightSquare, turn, paused, movePiece }) => {
                             oddRow={`${field.getX() === 1 ?changeRow():oddRow}`}
                             pieceSelectable={getPieceSelectable(field)}
                             movePiece={movePiece}
+                            resigned={getKingResigned(field)}
                         /> )
                     }
                 </div>
