@@ -99,7 +99,8 @@ const App = () => {
 
     const [fields, setFields] = useState(initialFieldState)
     const [matchData, setMatchData] = useState(['White', 'Black', '100'])
-    const [formCompleted, setFormCompleted] = useState(false) // !!! wäre eigentlich 'false' !!!
+    const [language, setLanguage] = useState('english') //
+    const [formCompleted, setFormCompleted] = useState(true) // !!! wäre eigentlich 'false' !!!
     const [victor, setVictor] = useState('nobody')
     const [paused, setPaused] = useState(false)
     const [started, setStarted] = useState(false)
@@ -115,6 +116,7 @@ const App = () => {
         window.location.reload();
         // setFields(initialFieldState)
         // setMatchData(['White', 'Black', '100'])
+        setLanguage('english')
         setFormCompleted(false)
         setVictor('nobody')
         // setPaused(false)
@@ -126,6 +128,11 @@ const App = () => {
         // setLastTurn('nobody')
         // setDeadPieces([[], []])
         // setRerender(false)
+    }
+
+    const switchLanguage = () => {
+        if(language === 'english') setLanguage ('german')
+        else setLanguage('english')
     }
 
     const switchTurn = () => {
@@ -166,6 +173,43 @@ const App = () => {
         }
     }
 
+    const highlightCheckPositions = (checks, fields) => {
+        if (checks.length > 0) {
+            for (let checkPosition of checks) {
+                getField(fields, checkPosition.x, checkPosition.y).setInCheck(true)
+            }
+        } else {
+            for(let i = 0; i < fields.length; i++) {
+                let fieldRow = fields[i];
+                for(let j = 0; j < fieldRow.length; j++) {
+                    if(fieldRow[j].getInCheck()) {
+                        fieldRow[j].setInCheck(false)
+                    }
+                }
+            }
+        }
+    }
+
+    const getKingFields = (fields) => {
+        let kingFields = {
+            whiteKing: '',
+            blackKing: ''
+        }
+        for(let i = 0; i < fields.length; i++) {
+            let fieldRow = fields[i];
+            for(let j = 0; j < fieldRow.length; j++) {
+                if (fieldRow[j].getPiece() !== 'empty') {
+                    if(fieldRow[j].getPiece().getColor() === 'white' && fieldRow[j].getPiece().getName() === 'King') {
+                        kingFields.whiteKing = fieldRow[j] // white king
+                    } else if(fieldRow[j].getPiece().getColor() === 'black' && fieldRow[j].getPiece().getName() === 'King') {
+                        kingFields.blackKing = fieldRow[j] // black king
+                    }
+                }
+            }
+        }
+        return kingFields
+    }
+
     const movePiece = (toX, toY) => {
         const fromX = hlCoords.hX
         const fromY = hlCoords.hY
@@ -199,6 +243,12 @@ const App = () => {
                     manageKilledPiece(killedPiece)
                     fieldRow[j].setPiece(movingPiece)
                     if (movingPiece.getName() === 'Pawn') handleSpecialMoves(fieldRow[j], toX, toY)
+                    // check if in check
+                    if (victor === 'nobody') {
+                        const checks = fieldRow[j].getPiece().getIsInCheck(newFields, getKingFields(newFields))
+                        highlightCheckPositions(checks, newFields)
+                        console.log(checks)
+                    }
                 }
             }
         }
@@ -373,13 +423,14 @@ const App = () => {
 
     return (
     <div className="App">
-        <Header left={formCompleted}/>
+        <Header left={formCompleted} language={language} />
         { !formCompleted && // Form
-            <InitGame initMatch={initMatch}/>
+            <InitGame initMatch={initMatch} switchLanguage={switchLanguage} language={language} />
         }
         { formCompleted &&
             <Match
                 matchData={matchData}
+                language={language}
                 startGame={startGame}
                 started={started}
                 fields={fields}
@@ -395,10 +446,10 @@ const App = () => {
             />
         }
         {victor !== 'nobody' &&
-            <Victory victor={victor}/>
+            <Victory victor={victor} language={language} />
         }
         {victor === 'nobody' && (fieldToPromote.x !== 0 || fieldToPromote.y !== 0 || fieldToPromote.color !== 'none') &&
-            <PromotionSelection promotePawn={promotePawn} pieceColor={fieldToPromote.color} />
+            <PromotionSelection promotePawn={promotePawn} pieceColor={fieldToPromote.color} language={language} />
         }
     </div>
   );

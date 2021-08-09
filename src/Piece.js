@@ -85,8 +85,56 @@ class Piece {
     }
 
     getPossibleEnemyMovesCount(fields, color) {
-        let king = new King(color, 'King')
-        return king.getEveryPossibleEnemyMove(fields, true).length
+        return this.getEveryPossibleEnemyMove(fields, true, color).length
+    }
+
+    getEveryPossibleEnemyMove(fields, checkForCheck, ownColor) {
+        let everyPossibleMove = []
+        for(let i = 0; i < fields.length; i++) {
+            let fieldRow = fields[i];
+            for(let j = 0; j < fieldRow.length; j++) {
+                if (fieldRow[j].getPiece() !== 'empty' && fieldRow[j].getPiece().getColor() !== ownColor) {
+                    let possibleMoves
+                    if (fieldRow[j].getPiece().getName() === 'King') possibleMoves = fieldRow[j].getPiece().getMoves(fields, fieldRow[j], checkForCheck)
+                    else possibleMoves = fieldRow[j].getPiece().getMoves(fields, fieldRow[j])
+                    everyPossibleMove.push(...possibleMoves)
+                }
+            }
+        }
+        return everyPossibleMove
+    }
+
+    getIsInCheck(fields, kingFields) {
+        const wkX = kingFields.whiteKing.getX()
+        const wkY =  kingFields.whiteKing.getY()
+        const bkX = kingFields.blackKing.getX()
+        const bkY =  kingFields.blackKing.getY()
+        const everyPossibleBlackMove = this.getEveryPossibleEnemyMove(fields, false, 'white')
+        const everyPossibleWhiteMove = this.getEveryPossibleEnemyMove(fields, false, 'black')
+        console.log("White: " + wkX + "|" + wkY)
+        console.log("Black: " + bkX + "|" + bkY)
+        let checks = []
+        // check for white king in check
+        for (const bMove of everyPossibleBlackMove) {
+            if (bMove.x === wkX && bMove.y === wkY) checks.push({x:wkX, y:wkY})
+        }
+        // check for black king in check
+        for (const wMove of everyPossibleWhiteMove) {
+            if (wMove.x === bkX && wMove.y === bkY) checks.push({x:bkX, y:bkY})
+        }
+        if (checks.length > 0) return checks
+        return false
+        /*
+        const everyPossibleMove = this.getEveryPossibleEnemyMove(fields, false, 'black')
+        everyPossibleMove.push(...this.getEveryPossibleEnemyMove(fields, false, 'white'))
+        let checks = []
+        // check kings are in check
+        for (const move of everyPossibleMove) {
+            if ((move.x === wkX && move.y === wkY) || (move.x === bkX && move.y === bkY)) checks.push({x:move.x, y:move.y})
+        }
+        if (checks.length > 0) return checks
+        return false
+        */
     }
 }
 
@@ -267,22 +315,6 @@ class King extends Piece {
                 possibleMoveList.push({x: cField.getX(), y: cField.getY()})
             }
         }
-    }
-
-    getEveryPossibleEnemyMove(fields, checkForCheck) {
-        let everyPossibleMove = []
-        for(let i = 0; i < fields.length; i++) {
-            let fieldRow = fields[i];
-            for(let j = 0; j < fieldRow.length; j++) {
-                if (fieldRow[j].getPiece() !== 'empty' && fieldRow[j].getPiece().getColor() !== this.getColor()) {
-                    let possibleMoves
-                    if (fieldRow[j].getPiece().getName() === 'King') possibleMoves = fieldRow[j].getPiece().getMoves(fields, fieldRow[j], checkForCheck)
-                    else possibleMoves = fieldRow[j].getPiece().getMoves(fields, fieldRow[j])
-                    everyPossibleMove.push(...possibleMoves)
-                }
-            }
-        }
-        return everyPossibleMove
     }
 }
 

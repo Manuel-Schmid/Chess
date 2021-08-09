@@ -3,11 +3,16 @@ import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import {useRef, useState} from "react";
 import PieceIcon from "./PieceIcon";
 import MatchInteraction from "./MatchInteraction";
+import { FaPause, FaPlay } from "react-icons/fa";
 
-const Match = ({ matchData, startGame, started, fields, highlightSquare, showButtons, paused, pauseMatch, turn, possibleMoveCount, movePiece, deadPieces, defineVictor }) => {
+const Match = ({ matchData, language, startGame, started, fields, highlightSquare, showButtons, paused, pauseMatch, turn, possibleMoveCount, movePiece, deadPieces, defineVictor }) => {
     let player1 = matchData[0], player2 = matchData[1], time = matchData[2]
     const [showMatchInteraction, setShowMatchInteraction] = useState(false)
+    const [showClockTime, setShowClockTime] = useState(true)
 
+    const onClockClick = () => {
+        setShowClockTime(!showClockTime)
+    }
 
     const renderTime = ({ remainingTime }) => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -47,7 +52,7 @@ const Match = ({ matchData, startGame, started, fields, highlightSquare, showBut
         const isTimeUp = isNewTimeFirstTick.current;
 
         return (
-            <div className="time-wrapper">
+            <div className={`time-wrapper ${showClockTime ? '' : 'hidden'}`}>
                 <div key={remainingTime} className={`time ${isTimeUp ? "up" : ""}`}>
                     {formatTime(remainingTime)}
                 </div>
@@ -72,10 +77,10 @@ const Match = ({ matchData, startGame, started, fields, highlightSquare, showBut
     return (
         <div className={'match'}>
             <div className={'move-count-container move-count-container-top'}>
-                <p>Possible Moves: <b>{possibleMoveCount.black}</b></p>
+                <p>{language === 'english' ? 'Possible Moves: ' : 'Mögliche Spielzüge: '}<b>{possibleMoveCount.black}</b></p>
             </div>
             <div className={'move-count-container move-count-container-bottom'}>
-                <p>Possible Moves: <b>{possibleMoveCount.white}</b></p>
+                <p>{language === 'english' ? 'Possible Moves: ' : 'Mögliche Spielzüge: '}<b>{possibleMoveCount.white}</b></p>
             </div>
             <div className={'death-container'}>
                 <div className={'death-pool player-info'}>
@@ -85,7 +90,7 @@ const Match = ({ matchData, startGame, started, fields, highlightSquare, showBut
                         ))}
                     </div>
                 </div>
-                <button className={`big-btn start-btn ${started ? 'started' : ''}`} onClick={() => startGame()}>{!started ? 'Start' : 'End Game'}</button>
+                <button className={`big-btn start-btn ${started ? 'started' : ''}`} onClick={() => startGame()}>{!started ? 'Start' : `${language === 'english' ? 'End Game' : 'Spiel beenden'}`}</button>
                 <div className={'death-pool player-info'}>
                     <div className={'dead-pieces-container bottom'}>
                         {deadPieces[1].map((piece) => (
@@ -99,30 +104,34 @@ const Match = ({ matchData, startGame, started, fields, highlightSquare, showBut
                 <div className={'player-info'}>
                     <div className={'center-content'}>
                         <h2>{player2}</h2>
-                        <CountdownCircleTimer
-                            onComplete={() => defineVictor('black')}
-                            size={150}
-                            isPlaying={(started) && (turn === 'black') && (!paused)}
-                            duration={time*60}
-                            colors={[["#191343", 0.33], ["#F7B801", 0.33], ["#dc143c"]]}
-                        >
-                            {renderTime}
-                        </CountdownCircleTimer>
+                        <div className={'clock clickable'} onClick={() => onClockClick()}>
+                            <CountdownCircleTimer
+                                onComplete={() => defineVictor('black')}
+                                size={150}
+                                isPlaying={(started) && (turn === 'black') && (!paused)}
+                                duration={time*60}
+                                colors={[["#191343", 0.33], ["#F7B801", 0.33], ["#dc143c"]]}
+                            >
+                                {renderTime}
+                            </CountdownCircleTimer>
+                        </div>
                     </div>
                 </div>
-                <button onClick={pause} className={`pause-btn big-btn ${!showButtons ? 'hidden' : ''} ${paused ? 'paused-btn' : ''}`}>{paused ? 'unpause' : 'pause'}</button>
+                <button onClick={pause} className={`pause-btn big-btn ${!showButtons ? 'hidden' : ''} ${paused ? 'paused-btn' : ''}`}>{paused ? <FaPlay className={`pause-icon`} /> : <FaPause className={`pause-icon`} />}</button>
                 <div className={'player-info'}>
                     <div className={'center-content'}>
                         <h2>{player1}</h2>
-                        <CountdownCircleTimer
-                            onComplete={() => defineVictor('white')}
-                            size={150}
-                            isPlaying={(started) && (turn === 'white') && (!paused)}
-                            duration={time*60}
-                            colors={[["#191343", 0.33], ["#F7B801", 0.33], ["#dc143c"]]} // 004777 191343
-                        >
-                            {renderTime}
-                        </CountdownCircleTimer>
+                        <div className={'clock clickable'} onClick={() => onClockClick()}>
+                            <CountdownCircleTimer
+                                onComplete={() => defineVictor('white')}
+                                size={150}
+                                isPlaying={(started) && (turn === 'white') && (!paused)}
+                                duration={time*60}
+                                colors={[["#191343", 0.33], ["#F7B801", 0.33], ["#dc143c"]]} // 004777 191343
+                            >
+                                {renderTime}
+                            </CountdownCircleTimer>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -130,6 +139,7 @@ const Match = ({ matchData, startGame, started, fields, highlightSquare, showBut
                 started={started}
                 showButtons={showButtons}
                 showMatchInteraction={showMatchInteraction}
+                language={language}
                 setShowMatchInteraction={setShowMatchInteraction}
                 pauseMatch={pauseMatch}
                 defineVictor={defineVictor}

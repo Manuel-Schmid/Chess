@@ -1,6 +1,6 @@
 import {AiFillSetting} from "react-icons/all";
 
-const MatchInteraction = ({ started, showButtons, showMatchInteraction, setShowMatchInteraction, pauseMatch, defineVictor }) => {
+const MatchInteraction = ({ started, showButtons, showMatchInteraction, language, setShowMatchInteraction, pauseMatch, defineVictor }) => {
     const onSettingsClick = () => {
         if (!showMatchInteraction) pauseMatch(true)
         else pauseMatch(false)
@@ -31,25 +31,24 @@ const MatchInteraction = ({ started, showButtons, showMatchInteraction, setShowM
                     <button
                         onClick={() => handleInteraction('black-resign')}
                         className={`pause-btn big-btn ${!showButtons ? 'hidden' : ''}`}>
-                        Black resigns
+                        {language === 'english' ? 'Black resigns' : 'Schwarz gibt auf'}
                     </button>
                 </div>
             </div>
             <button
                 onClick={() => handleInteraction('draw')}
                 className={`pause-btn big-btn ${!showButtons ? 'hidden' : ''}`}>
-                Draw
+                {language === 'english' ? 'Draw' : 'Unentschieden'}
             </button>
             <div className={'player-info'}>
                 <div className={'center-content width-auto'}>
                     <button
                         onClick={() => handleInteraction('white-resign')}
                         className={`pause-btn big-btn ${!showButtons ? 'hidden' : ''}`}>
-                        White resigns
+                        {language === 'english' ? 'White resigns' : 'Weiss gibt auf'}
                     </button>
                 </div>
             </div>
-
             { showButtons && started &&
                 <div className={'settings clickable'} onClick={() => onSettingsClick()}>
                     <AiFillSetting />

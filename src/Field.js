@@ -5,6 +5,7 @@ class Field {
         this.piece = piece
         this.highlighted = false
         this.movable = false
+        this.inCheck = false
     }
 
     setPiece(piece) {
@@ -37,6 +38,14 @@ class Field {
 
     setMovable(value) {
         this.movable = value;
+    }
+
+    getInCheck() {
+        return this.inCheck;
+    }
+
+    setInCheck(value) {
+        this.inCheck = value;
     }
 }
 

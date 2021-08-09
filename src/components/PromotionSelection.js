@@ -3,7 +3,7 @@ import * as Pieces from "../Piece";
 import PieceIcon from "./PieceIcon";
 import {useState} from "react";
 
-const PromotionSelection = ({ promotePawn, pieceColor }) => {
+const PromotionSelection = ({ promotePawn, pieceColor, language }) => {
 
     const [selection, setSelection] = useState('Queen')
 
@@ -35,20 +35,20 @@ const PromotionSelection = ({ promotePawn, pieceColor }) => {
         <div>
             <div className='popup'>
                 <div className='popup_inner'>
-                    <h2>Select the piece you want your Pawn to become</h2>
+                    <h2>{language === 'english' ? 'Select the piece you want your Pawn to become' : 'Wählen Sie die Schachfigur, die Ihr Bauer werden soll'}</h2>
                     <div className={'promotion-container'}>
                         <select id={'promotion'} name="option-select" onChange={() => updateSelection()}>
                             <option value="Queen">
-                                Queen
+                                {language === 'english' ? 'Queen' : 'Königin'}
                             </option>
                             <option value="Rook">
-                                Rook
+                                {language === 'english' ? 'Rook' : 'Turm'}
                             </option>
                             <option value="Bishop">
-                                Bishop
+                                {language === 'english' ? 'Bishop' : 'Läufer'}
                             </option>
                             <option value="Knight">
-                                Knight
+                                {language === 'english' ? 'Knight' : 'Springer'}
                             </option>
                         </select>
                         <div className={'preview'}>
@@ -56,7 +56,7 @@ const PromotionSelection = ({ promotePawn, pieceColor }) => {
                             <FaArrowRight className={'arrow'} />
                             <PieceIcon piece={selection} color={pieceColor} />
                         </div>
-                        <button onClick={executePromotion} className={'btn'}>Promote Pawn</button>
+                        <button onClick={executePromotion} className={'btn'}>{language === 'english' ? 'Promote Pawn' : 'Bauer befördern'}</button>
                     </div>
                 </div>
             </div>

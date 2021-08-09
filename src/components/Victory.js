@@ -1,7 +1,7 @@
-const Victory = ({ victor }) => {
+const Victory = ({ victor, language }) => {
     return (
         <div className={'victory-text'}>
-            {victor === 'draw' ? 'Draw !!!' : `${victor} has won!!!`}
+            {victor === 'draw' ? `${language==='english'?'Draw!':'Unentschieden!'}` : `${language==='english'?`${victor} has won!`:`${victor} hat gewonnen!`}`}
         </div>
     )
 }

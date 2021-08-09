@@ -14,11 +14,12 @@ const Square = ({ field, fieldNr, oddRow, highlightSquare, pieceSelectable, move
 
     return (
         <div
-            className={`square ${calcColor((oddRow === 'true'), isOdd(fieldNr))} ${pieceSelectable ? 'clickable':''} ${field.getHighlighted() ? 'highlighted':''} ${field.getMovable() ? 'movable':''}`}
+            className={`square ${calcColor((oddRow === 'true'), isOdd(fieldNr))} ${pieceSelectable ? 'clickable':''} ${field.getInCheck() ? 'inCheck':''} ${field.getMovable() ? 'movable':''}`}
+            id={`${field.getHighlighted() ? 'highlighted':''}`}
             onClick={field.getMovable() ? () => movePiece(field.getX(), field.getY())
                 : pieceSelectable ? () => highlightSquare(field.getX(), field.getY())
                     : doNothing}>
-            {/*{field.getX() + "|" + field.getY()}*/}
+            {/*{field.getX() + "|" + field.getY()} /!* comment this out !!! *!/*/}
             {field.getMovable() &&
                 <span className={`dot ${field.getMovable() && field.getPiece() !== 'empty' ? 'kill' : ''}`} />
             }
