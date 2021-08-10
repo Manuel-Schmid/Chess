@@ -583,3 +583,15 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+.checkbox {
+  float: left;
+  width: 40px !important;
+}
+
+.touch-move-label {
+  margin-left: 5px;
+  height: 54px;
+  line-height: 50px;
+  padding-left: 48px;
+}

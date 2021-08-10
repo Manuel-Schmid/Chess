@@ -100,7 +100,8 @@ const App = () => {
     const [fields, setFields] = useState(initialFieldState)
     const [matchData, setMatchData] = useState(['White', 'Black', '100'])
     const [language, setLanguage] = useState('english')
-    const [formCompleted, setFormCompleted] = useState(true) // !!! wäre eigentlich 'false' !!!
+    const [touchMove, setTouchMove] = useState(false)
+    const [formCompleted, setFormCompleted] = useState(false) // !!! wäre eigentlich 'false' !!!
     const [victor, setVictor] = useState('nobody')
     const [paused, setPaused] = useState(false)
     const [started, setStarted] = useState(false)
@@ -242,12 +243,12 @@ const App = () => {
                     killedPiece = fieldRow[j].getPiece()
                     manageKilledPiece(killedPiece)
                     fieldRow[j].setPiece(movingPiece)
-                    if (movingPiece.getName() === 'Pawn') handleSpecialMoves(fieldRow[j], toX, toY)
+                    if (movingPiece.getName() === 'Pawn' || movingPiece.getName() === 'King' || movingPiece.getName() === 'Rook') handleFirstMoves(fieldRow[j])
+                    if (movingPiece.getName() === 'Pawn') handlePawnPromotion(fieldRow[j], toX, toY)
                     // check if in check
-                    if (victor === 'nobody') {
+                    if (victor === 'nobody' && (killedPiece === 'empty' || killedPiece.getName() !== 'King')) {
                         const checks = fieldRow[j].getPiece().getIsInCheck(newFields, getKingFields(newFields))
                         highlightCheckPositions(checks, newFields)
-                        console.log(checks)
                     }
                 }
             }
@@ -284,11 +285,23 @@ const App = () => {
         switchTurn()
     }
 
-    const handleSpecialMoves = (field, toX, toY) => {
+    const isKingInCheck = (color) => {
+        for(let i = 0; i < fields.length; i++) {
+            let fieldRow = fields[i];
+            for(let j = 0; j < fieldRow.length; j++) {
+                if (fieldRow[j].getInCheck() && fieldRow[j].getPiece() !== 'empty' && fieldRow[j].getPiece().getColor() === color) return true
+            }
+        }
+        return false
+    }
+
+    const handleFirstMoves = (field) => {
         let movingPiece = field.getPiece()
-        // first move
         if (movingPiece.getFirstMove()) movingPiece.setFirstMove(false)
-        // promotion
+    }
+
+    const handlePawnPromotion = (field, toX, toY) => {
+        let movingPiece = field.getPiece()
         if (toY === 1 && movingPiece.getColor() === 'white') showPromotionSelection(movingPiece, toX, toY)
         else if (toY === 8 && movingPiece.getColor() === 'black') showPromotionSelection(movingPiece, toX, toY)
     }
@@ -362,26 +375,29 @@ const App = () => {
     }
 
     const highlightSquare = (x, y) => {
-        let newFields = fields
-        resetPossibleMoveHighlights(newFields)
-        if(!getField(newFields, x, y).getHighlighted()) { // not highlighted
-            newFields = resetLastHighlight(newFields)
-            changeHighlight(newFields, x, y, true)
-            setHlCoords({
-                hX: x,
-                hY: y
-            })
-            // highlight possible fields
-            highLightPossibleMoves(newFields, getField(newFields, x, y), true)
-        } else {
-            changeHighlight(newFields, x, y, false) // already highlighted
-            setHlCoords({
-                hX: 0,
-                hY: 0
-            })
-        }
+        const highlightedField = getField(fields, hlCoords.hX, hlCoords.hY)
+        if (!touchMove || ((hlCoords.hX === 0 && hlCoords.hY === 0) || isKingInCheck(turn) || ((hlCoords.hX !== 0) && (highlightedField.getPiece().getMoves(fields, highlightedField).length === 0)))) {
+            let newFields = fields
+            resetPossibleMoveHighlights(newFields)
+            if(!getField(newFields, x, y).getHighlighted()) { // not highlighted
+                newFields = resetLastHighlight(newFields)
+                changeHighlight(newFields, x, y, true)
+                setHlCoords({
+                    hX: x,
+                    hY: y
+                })
+                // highlight possible fields
+                highLightPossibleMoves(newFields, getField(newFields, x, y), true)
+            } else {
+                changeHighlight(newFields, x, y, false) // already highlighted
+                setHlCoords({
+                    hX: 0,
+                    hY: 0
+                })
+            }
 
-        setFields(newFields)
+            setFields(newFields)
+        }
     }
 
     const initMatch = (user1, user2, duration) => {
@@ -425,7 +441,7 @@ const App = () => {
     <div className="App">
         <Header left={formCompleted} language={language} />
         { !formCompleted && // Form
-            <InitGame initMatch={initMatch} switchLanguage={switchLanguage} language={language} />
+            <InitGame initMatch={initMatch} switchLanguage={switchLanguage} setTouchMove={setTouchMove} language={language} />
         }
         { formCompleted &&
             <Match
@@ -440,6 +456,7 @@ const App = () => {
                 pauseMatch={pauseMatch}
                 possibleMoveCount={possibleMoveCounts}
                 turn={turn}
+                touchMoveTouched={touchMove && !((hlCoords.hX === 0 && hlCoords.hY === 0) || isKingInCheck(turn) || ((hlCoords.hX !== 0) && (getField(fields, hlCoords.hX, hlCoords.hY).getPiece().getMoves(fields, getField(fields, hlCoords.hX, hlCoords.hY)).length === 0)))}
                 movePiece={movePiece}
                 deadPieces={deadPieces}
                 defineVictor={defineVictor}

@@ -1,4 +1,4 @@
-const InitGame = ({ initMatch, switchLanguage, language }) => {
+const InitGame = ({ initMatch, switchLanguage, setTouchMove, language }) => {
     let player1 = ''
     let player2 = ''
     let time = 0
@@ -22,6 +22,7 @@ const InitGame = ({ initMatch, switchLanguage, language }) => {
         time = document.getElementById('time').value
         player1 = player1.trim()
         player2 = player2.trim()
+        setTouchMove(document.getElementById('touch-move').checked)
     }
 
     const onLanguageSwitch = () => {
@@ -64,6 +65,10 @@ const InitGame = ({ initMatch, switchLanguage, language }) => {
                     <option value="10"> 10 {minsText}</option>
                     <option value="5"> 5 {minsText}</option>
                 </select>
+            </div>
+            <div className={'form-control'}>
+                <input id={'touch-move'} type={'checkbox'} className={'checkbox'} />
+                <label className={'touch-move-label'}>{language === 'english' ? 'Touch-Move' : 'Berührt-Geführt (Touch-Move)'}</label>
             </div>
             <input className={'btn btn-block'} type={'submit'} value={language === 'english' ? 'Start Game' : 'Spiel starten'} />
         </form>

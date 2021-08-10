@@ -111,8 +111,8 @@ class Piece {
         const bkY =  kingFields.blackKing.getY()
         const everyPossibleBlackMove = this.getEveryPossibleEnemyMove(fields, false, 'white')
         const everyPossibleWhiteMove = this.getEveryPossibleEnemyMove(fields, false, 'black')
-        console.log("White: " + wkX + "|" + wkY)
-        console.log("Black: " + bkX + "|" + bkY)
+        // console.log("White: " + wkX + "|" + wkY)
+        // console.log("Black: " + bkX + "|" + bkY)
         let checks = []
         // check for white king in check
         for (const bMove of everyPossibleBlackMove) {
@@ -124,17 +124,6 @@ class Piece {
         }
         if (checks.length > 0) return checks
         return false
-        /*
-        const everyPossibleMove = this.getEveryPossibleEnemyMove(fields, false, 'black')
-        everyPossibleMove.push(...this.getEveryPossibleEnemyMove(fields, false, 'white'))
-        let checks = []
-        // check kings are in check
-        for (const move of everyPossibleMove) {
-            if ((move.x === wkX && move.y === wkY) || (move.x === bkX && move.y === bkY)) checks.push({x:move.x, y:move.y})
-        }
-        if (checks.length > 0) return checks
-        return false
-        */
     }
 }
 
@@ -185,6 +174,14 @@ class Pawn extends Piece {
 }
 
 class Rook extends Piece {
+    firstMove = true
+    getFirstMove() {
+        return this.firstMove
+    }
+    setFirstMove(firstMove) {
+        this.firstMove = firstMove
+    }
+
     getMoves(fieldList, field) {
         let possibleMoveList = []
 
@@ -234,7 +231,15 @@ class Queen extends Piece {
 }
 
 class King extends Piece {
-    getMoves(fieldList, field, checkForCheck) { // , checkForCheck
+    firstMove = true
+    getFirstMove() {
+        return this.firstMove
+    }
+    setFirstMove(firstMove) {
+        this.firstMove = firstMove
+    }
+
+    getMoves(fieldList, field, checkForCheck = true) { // , checkForCheck
         let possibleMoveList = []
 
         // one square in every direction

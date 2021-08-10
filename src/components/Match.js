@@ -5,7 +5,7 @@ import PieceIcon from "./PieceIcon";
 import MatchInteraction from "./MatchInteraction";
 import { FaPause, FaPlay } from "react-icons/fa";
 
-const Match = ({ matchData, language, startGame, started, fields, highlightSquare, showButtons, paused, pauseMatch, turn, possibleMoveCount, movePiece, deadPieces, defineVictor }) => {
+const Match = ({ matchData, language, startGame, started, fields, highlightSquare, showButtons, paused, pauseMatch, touchMoveTouched, turn, possibleMoveCount, movePiece, deadPieces, defineVictor }) => {
     let player1 = matchData[0], player2 = matchData[1], time = matchData[2]
     const [showMatchInteraction, setShowMatchInteraction] = useState(false)
     const [showClockTime, setShowClockTime] = useState(true)
@@ -107,7 +107,7 @@ const Match = ({ matchData, language, startGame, started, fields, highlightSquar
                     </div>
                 </div>
             </div>
-            <Board fields={fields} highlightSquare={highlightSquare} turn={turn} paused={paused} movePiece={movePiece} resignedColor={resignedColor} />
+            <Board fields={fields} highlightSquare={highlightSquare} turn={turn} touchMoveTouched={touchMoveTouched} paused={paused} movePiece={movePiece} resignedColor={resignedColor} />
             <div className={`clock-container ${showMatchInteraction ? '' : 'front'}`}>
                 <div className={'player-info'}>
                     <div className={'center-content'}>
