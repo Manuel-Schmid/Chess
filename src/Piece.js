@@ -25,7 +25,7 @@ class Piece {
         return 'NA'
     }
 
-    isBreak(possibleMoveList, pField) { // not sure if this should be in here
+    isBreak(possibleMoveList, pField) {
         if (pField !== 'NA') {
             if (pField.getPiece() !== 'empty' && pField.getPiece().getColor() === this.getColor()) return true
             possibleMoveList.push({x:pField.getX(), y:pField.getY()})
@@ -239,8 +239,38 @@ class King extends Piece {
         this.firstMove = firstMove
     }
 
+    checkRookCastling(fieldList, kingField) {
+        // const everyPossibleEnemyMove = this.getEveryPossibleEnemyMove(fieldList, false, this.getColor())
+
+        for (let i = 1; i <= 4; i++) { // left
+            const pField = this.getField(fieldList, kingField.getX() - i, kingField.getY())
+            if (pField === 'NA' || (i < 4 && pField.getPiece() !== 'empty')) { //  && this.moveListContains(everyPossibleEnemyMove, pField.getX(), pField.getY())
+                break
+            } else {
+                if (i === 4) {
+                    if (pField.getPiece() === 'empty' || pField.getPiece().getName() !== 'Rook' || (pField.getPiece().getName() === 'Rook' && !pField.getPiece().getFirstMove())) break
+                    console.log('castling is possible')
+                    // ...
+                }
+            }
+            // if (this.isBreak(possibleMoveList, pField)) break
+        }
+    }
+
+    moveListContains(list, x, y) {
+        for (const move of list) {
+            if (move.x === x && move.y === y) return true
+        }
+        return false
+    }
+
     getMoves(fieldList, field, checkForCheck = true) { // , checkForCheck
         let possibleMoveList = []
+
+        // castling
+        // if (!field.getInCheck() && this.firstMove) {
+        //     this.checkRookCastling(fieldList, field)
+        // }
 
         // one square in every direction
         this.pushIfNotCheck(possibleMoveList, fieldList, field.getX(), field.getY() - 1, field, checkForCheck)
@@ -303,7 +333,7 @@ class King extends Piece {
                             }
                         }
                     }
-                    everyPossibleMove = this.getEveryPossibleEnemyMove(newFields, false)
+                    everyPossibleMove = this.getEveryPossibleEnemyMove(newFields, false, fromField.getPiece().getColor())
                 }
             }
 

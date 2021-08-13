@@ -101,7 +101,7 @@ const App = () => {
     const [matchData, setMatchData] = useState(['White', 'Black', '100'])
     const [language, setLanguage] = useState('english')
     const [touchMove, setTouchMove] = useState(false)
-    const [formCompleted, setFormCompleted] = useState(false) // !!! wäre eigentlich 'false' !!!
+    const [formCompleted, setFormCompleted] = useState(true) // !!! wäre eigentlich 'false' !!!
     const [victor, setVictor] = useState('nobody')
     const [paused, setPaused] = useState(false)
     const [started, setStarted] = useState(false)
