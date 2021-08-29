@@ -98,7 +98,7 @@ const Match = ({ matchData, language, startGame, started, fields, highlightSquar
                         ))}
                     </div>
                 </div>
-                <button className={`big-btn start-btn ${started ? 'started' : ''}`} onClick={() => startGame()}>{!started ? 'Start' : `${language === 'english' ? 'End Game' : 'Spiel beenden'}`}</button>
+                <button className={`big-btn button-2 start-btn ${started ? 'started' : 'not-started'}`} onClick={() => startGame()}>{!started ? 'Start' : `${language === 'english' ? 'End Game' : 'Spiel beenden'}`}</button>
                 <div className={'death-pool player-info'}>
                     <div className={'dead-pieces-container bottom'}>
                         {deadPieces[1].map((piece) => (
@@ -125,7 +125,7 @@ const Match = ({ matchData, language, startGame, started, fields, highlightSquar
                         </div>
                     </div>
                 </div>
-                <button onClick={pause} className={`pause-btn big-btn ${!showButtons ? 'hidden' : ''} ${paused ? 'paused-btn' : ''}`}>{paused ? <FaPlay className={`pause-icon`} /> : <FaPause className={`pause-icon`} />}</button>
+                <button onClick={pause} className={`button-2 pause-btn big-btn ${!showButtons ? 'hidden' : ''} ${paused ? 'paused-btn' : 'not-paused-btn'}`}>{paused ? <FaPlay className={`pause-icon`} /> : <FaPause className={`pause-icon`} />}</button>
                 <div className={'player-info'}>
                     <div className={'center-content'}>
                         <h2>{player1}</h2>

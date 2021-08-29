@@ -30,21 +30,21 @@ const MatchInteraction = ({ started, showButtons, showMatchInteraction, language
                 <div className={'center-content width-auto'}>
                     <button
                         onClick={() => handleInteraction('black-resign')}
-                        className={`pause-btn big-btn ${!showButtons ? 'hidden' : ''}`}>
+                        className={`resignation button-2 big-btn ${!showButtons ? 'hidden' : ''}`}>
                         {language === 'english' ? 'Black resigns' : 'Schwarz gibt auf'}
                     </button>
                 </div>
             </div>
             <button
                 onClick={() => handleInteraction('draw')}
-                className={`pause-btn big-btn ${!showButtons ? 'hidden' : ''}`}>
-                {language === 'english' ? 'Draw' : 'Unentschieden'}
+                className={`draw button-2 big-btn ${!showButtons ? 'hidden' : ''}`}>
+                {language === 'english' ? 'Draw' : 'Remis'}
             </button>
             <div className={'player-info'}>
                 <div className={'center-content width-auto'}>
                     <button
                         onClick={() => handleInteraction('white-resign')}
-                        className={`pause-btn big-btn ${!showButtons ? 'hidden' : ''}`}>
+                        className={`resignation button-2 big-btn ${!showButtons ? 'hidden' : ''}`}>
                         {language === 'english' ? 'White resigns' : 'Weiss gibt auf'}
                     </button>
                 </div>
