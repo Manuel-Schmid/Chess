@@ -254,6 +254,9 @@ const App = () => {
             }
         }
 
+        // update last move highlighting -> BUG: promotion removes highlighting
+        highlightLastMove(fromX, fromY, toX, toY)
+
         // bare king rules trigger a draw
         if (deadPieces[0].length === 15 && deadPieces[1].length === 15) defineVictor('draw')
         if (deadPieces[0].length + deadPieces[1].length === 29) { // only 3 pieces left alive
@@ -283,6 +286,21 @@ const App = () => {
         // update fields
         setFields(newFields)
         switchTurn()
+    }
+
+    const highlightLastMove = (fromX, fromY, toX, toY) => {
+        let newFields = fields
+        for(let i = 0; i < newFields.length; i++) {
+            let fieldRow = newFields[i];
+            for(let j = 0; j < fieldRow.length; j++) {
+                if((fieldRow[j].getX() === fromX && fieldRow[j].getY() === fromY) || (fieldRow[j].getX() === toX && fieldRow[j].getY() === toY)) {
+                    fieldRow[j].setLastMove(true)
+                } else {
+                    fieldRow[j].setLastMove(false)
+                }
+            }
+        }
+        setFields(newFields)
     }
 
     const isKingInCheck = (color) => {
@@ -317,7 +335,7 @@ const App = () => {
             let fieldRow = newFields[i];
             for(let j = 0; j < fieldRow.length; j++) {
                 if(fieldRow[j].getX() === fieldToPromote.x && fieldRow[j].getY() === fieldToPromote.y) {
-                    fieldRow[j] = new Field(fieldToPromote.x, fieldToPromote.y, piece)
+                    fieldRow[j].setPiece(piece)
                 }
             }
         }

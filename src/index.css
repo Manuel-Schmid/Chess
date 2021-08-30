@@ -291,6 +291,13 @@ body {
   width: 9vh;
 }
 
+.last-move {
+  /*background-color: rgba(164, 226, 165, 0.9);*/
+  background-color: rgba(128, 236, 192, 0.44);
+  height: 9.5vh;
+  width: 9.5vh;
+}
+
 .row {
   height: 12.5%;
   width: 100%;

@@ -5,6 +5,7 @@ class Field {
         this.piece = piece
         this.highlighted = false
         this.movable = false
+        this.lastMove = false
         this.inCheck = false
     }
 
@@ -38,6 +39,14 @@ class Field {
 
     setMovable(value) {
         this.movable = value;
+    }
+
+    getLastMove() {
+        return this.lastMove;
+    }
+
+    setLastMove(value) {
+        this.lastMove = value;
     }
 
     getInCheck() {
