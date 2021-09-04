@@ -111,8 +111,6 @@ class Piece {
         const bkY =  kingFields.blackKing.getY()
         const everyPossibleBlackMove = this.getEveryPossibleEnemyMove(fields, false, 'white')
         const everyPossibleWhiteMove = this.getEveryPossibleEnemyMove(fields, false, 'black')
-        // console.log("White: " + wkX + "|" + wkY)
-        // console.log("Black: " + bkX + "|" + bkY)
         let checks = []
         // check for white king in check
         for (const bMove of everyPossibleBlackMove) {

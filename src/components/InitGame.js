@@ -2,7 +2,7 @@ const InitGame = ({ initMatch, switchLanguage, setTouchMove, language }) => {
     let player1 = ''
     let player2 = ''
     let time = 0
-    let minsText = (language === 'english' ? 'minutes' : 'Minuten')
+    let minutesText = (language === 'english' ? 'minutes' : 'Minuten')
 
     const onSubmit = (e) => {
         e.preventDefault()
@@ -57,13 +57,13 @@ const InitGame = ({ initMatch, switchLanguage, setTouchMove, language }) => {
             <div className={'form-control'}>
                 <label>{language === 'english' ? 'Time per player' : 'Zeit pro Spieler'}</label>
                 <select id={'time'} name="option-select">
-                    <option value="360">360 {minsText}</option>
-                    <option value="200">200 {minsText}</option>
-                    <option value="100">100 {minsText}</option>
-                    <option value="60"> 60 {minsText}</option>
-                    <option value="30"> 30 {minsText}</option>
-                    <option value="10"> 10 {minsText}</option>
-                    <option value="5"> 5 {minsText}</option>
+                    <option value="360">360 {minutesText}</option>
+                    <option value="200">200 {minutesText}</option>
+                    <option value="100">100 {minutesText}</option>
+                    <option value="60"> 60 {minutesText}</option>
+                    <option value="30"> 30 {minutesText}</option>
+                    <option value="10"> 10 {minutesText}</option>
+                    <option value="5"> 5 {minutesText}</option>
                 </select>
             </div>
             <div className={'form-control'}>

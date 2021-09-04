@@ -101,8 +101,6 @@ body {
 
 .start-btn {
   width: 170px;
-  /*padding-top: 30px;*/
-  /*padding-bottom: 30px;*/
   text-align: center;
   text-transform: uppercase;
   font-weight: 600;
@@ -240,7 +238,6 @@ body {
   float: left;
   margin: 5vh auto 10px;
   /*margin-left: calc((50vw - 45vh));;*/
-  /*background-color: lightgray;*/
   background-color: white;
   width: 90vh;
   height: 90vh;
@@ -254,7 +251,6 @@ body {
 }
 
 #highlighted {
-  /*background-color: lightblue !important;*/
   background-color: lightblue !important;
 }
 
@@ -280,7 +276,6 @@ body {
   height: 5vh;
   width: 5vh;
   background-color: #a4e284;
-  /*background-color: lightblue;*/
   border-radius: 50%;
   display: inline-block;
 }
@@ -319,8 +314,6 @@ body {
 }
 
 .arrow {
-  /*position: relative;*/
-  /*top: 17%;*/
   margin-left: 0;
   margin-right: 10px;
   vertical-align: middle;
@@ -341,7 +334,6 @@ body {
 }
 
 .white {
-  /*color: rgb(242 242 242);*/
   color: rgb(240 245 211);;
   stroke: black;
   stroke-width: 10px;
@@ -462,10 +454,6 @@ body {
   }
 }
 
-.popup select {
-  /*font-family: 'FontAwesome', 'sans-serif';*/
-}
-
 .preview {
   float: right;
 }
@@ -538,7 +526,7 @@ body {
 
 /* ******************************************* */
 
-/* The switch - the box around the slider */
+/* The switch (the box around the slider) */
 
 .switch-container {
   text-align: center;
@@ -575,7 +563,6 @@ body {
   height: 0;
 }
 
-/* The slider */
 .slider {
   position: absolute;
   cursor: pointer;
@@ -583,7 +570,6 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  /*background-color: #ccc;*/
   background-color: var(--english);
   -webkit-transition: .4s;
   transition: .4s;

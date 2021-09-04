@@ -16,13 +16,9 @@ const Match = ({ matchData, language, startGame, started, fields, highlightSquar
     }
 
     const renderTime = ({ remainingTime }) => {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
         const currentTime = useRef(remainingTime);
-        // eslint-disable-next-line react-hooks/rules-of-hooks
         const prevTime = useRef(null);
-        // eslint-disable-next-line react-hooks/rules-of-hooks
         const isNewTimeFirstTick = useRef(false);
-        // eslint-disable-next-line react-hooks/rules-of-hooks
         const [, setOneLastRerender] = useState(0);
 
         if (currentTime.current !== remainingTime) {
