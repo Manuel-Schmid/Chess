@@ -245,6 +245,7 @@ const App = () => {
                     fieldRow[j].setPiece(movingPiece)
                     if (movingPiece.getName() === 'Pawn' || movingPiece.getName() === 'King' || movingPiece.getName() === 'Rook') handleFirstMoves(fieldRow[j])
                     if (movingPiece.getName() === 'Pawn') handlePawnPromotion(fieldRow[j], toX, toY)
+                    if (movingPiece.getName() === 'King' && (movingPiece.castlingLeft || movingPiece.castlingRight)) handleCastling(movingPiece, fromX, fromY, toX, toY)
                     // check if in check
                     if (victor === 'nobody' && (killedPiece === 'empty' || killedPiece.getName() !== 'King')) {
                         const checks = fieldRow[j].getPiece().getIsInCheck(newFields, getKingFields(newFields))
@@ -322,6 +323,39 @@ const App = () => {
         let movingPiece = field.getPiece()
         if (toY === 1 && movingPiece.getColor() === 'white') showPromotionSelection(movingPiece, toX, toY)
         else if (toY === 8 && movingPiece.getColor() === 'black') showPromotionSelection(movingPiece, toX, toY)
+    }
+
+    const handleCastling = (movingPiece, fromX, fromY, toX, toY) => {
+        if(movingPiece.castlingLeft && (toX === fromX - 2 && toY === fromY)) {
+            moveRook(fromX-4, fromY, fromX-1, fromY)
+        }
+        else if(movingPiece.castlingRight && (toX === fromX + 2 && toY === fromY)) {
+            moveRook(fromX+3, fromY, fromX+1, fromY)
+        }
+    }
+
+    const moveRook = (fromX, fromY, toX, toY) => {
+        let newFields = fields
+        let movingPiece
+        for(let i = 0; i < newFields.length; i++) {
+            let fieldRow = newFields[i];
+            for(let j = 0; j < fieldRow.length; j++) {
+                if(fieldRow[j].getX() === fromX && fieldRow[j].getY() === fromY) {
+                    movingPiece = fieldRow[j].getPiece()
+                    fieldRow[j].setPiece('empty')
+                }
+            }
+        }
+        for(let i = 0; i < newFields.length; i++) {
+            let fieldRow = newFields[i];
+            for(let j = 0; j < fieldRow.length; j++) {
+                if(fieldRow[j].getX() === toX && fieldRow[j].getY() === toY) {
+                    movingPiece.setFirstMove(false)
+                    fieldRow[j].setPiece(movingPiece)
+                }
+            }
+        }
+        setFields(newFields)
     }
 
     const showPromotionSelection = (movingPiece, x, y) => {
