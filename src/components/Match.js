@@ -15,7 +15,7 @@ const Match = ({ matchData, language, startGame, started, fields, highlightSquar
         setShowClockTime(!showClockTime)
     }
 
-    const renderTime = ({ remainingTime }) => {
+    const RenderTime = ({ remainingTime }) => {
         const currentTime = useRef(remainingTime);
         const prevTime = useRef(null);
         const isNewTimeFirstTick = useRef(false);
@@ -116,7 +116,7 @@ const Match = ({ matchData, language, startGame, started, fields, highlightSquar
                                 duration={time*60}
                                 colors={[["#191343", 0.33], ["#F7B801", 0.33], ["#dc143c"]]}
                             >
-                                {renderTime}
+                                {RenderTime}
                             </CountdownCircleTimer>
                         </div>
                     </div>
@@ -133,7 +133,7 @@ const Match = ({ matchData, language, startGame, started, fields, highlightSquar
                                 duration={time*60}
                                 colors={[["#191343", 0.33], ["#F7B801", 0.33], ["#dc143c"]]} // 004777 191343
                             >
-                                {renderTime}
+                                {RenderTime}
                             </CountdownCircleTimer>
                         </div>
                     </div>

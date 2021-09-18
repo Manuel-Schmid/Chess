@@ -230,6 +230,8 @@ class Queen extends Piece {
 
 class King extends Piece {
     firstMove = true
+    castlingLeft = false
+    castlingRight = false
     getFirstMove() {
         return this.firstMove
     }
@@ -237,21 +239,33 @@ class King extends Piece {
         this.firstMove = firstMove
     }
 
-    checkRookCastling(fieldList, kingField) {
-        // const everyPossibleEnemyMove = this.getEveryPossibleEnemyMove(fieldList, false, this.getColor())
-
+    checkRookCastling(possibleMoveList, fieldList, kingField) {
+        const everyPossibleEnemyMove = this.getEveryPossibleEnemyMove(fieldList, false, this.getColor())
+        this.castlingLeft = false
         for (let i = 1; i <= 4; i++) { // left
             const pField = this.getField(fieldList, kingField.getX() - i, kingField.getY())
-            if (pField === 'NA' || (i < 4 && pField.getPiece() !== 'empty')) { //  && this.moveListContains(everyPossibleEnemyMove, pField.getX(), pField.getY())
+            if (pField === 'NA' || (i < 4 && pField.getPiece() !== 'empty') || this.moveListContains(everyPossibleEnemyMove, pField.getX(), pField.getY())) { // ist der weg zum Rook frei?
                 break
-            } else {
-                if (i === 4) {
-                    if (pField.getPiece() === 'empty' || pField.getPiece().getName() !== 'Rook' || (pField.getPiece().getName() === 'Rook' && !pField.getPiece().getFirstMove())) break
-                    console.log('castling is possible')
-                    // ...
+            } else if (i === 4) {
+                if (pField.getPiece() === 'empty' || pField.getPiece().getName() !== 'Rook' || (pField.getPiece().getName() === 'Rook' && !pField.getPiece().getFirstMove())) break
+                else {
+                    this.castlingLeft = true
+                    possibleMoveList.push({x: pField.getX() + 2, y: pField.getY()})
                 }
             }
-            // if (this.isBreak(possibleMoveList, pField)) break
+        }
+        this.castlingRight = false
+        for (let i = 1; i <= 3; i++) { // right
+            const pField = this.getField(fieldList, kingField.getX() + i, kingField.getY())
+            if (pField === 'NA' || (i < 3 && pField.getPiece() !== 'empty') || this.moveListContains(everyPossibleEnemyMove, pField.getX(), pField.getY())) { // ist der weg zum Rook frei?
+                break
+            } else if (i === 3) {
+                if (pField.getPiece() === 'empty' || pField.getPiece().getName() !== 'Rook' || (pField.getPiece().getName() === 'Rook' && !pField.getPiece().getFirstMove())) break
+                else {
+                    this.castlingRight = true
+                    possibleMoveList.push({x: pField.getX() - 1, y: pField.getY()})
+                }
+            }
         }
     }
 
@@ -266,9 +280,9 @@ class King extends Piece {
         let possibleMoveList = []
 
         // castling
-        // if (!field.getInCheck() && this.firstMove) {
-        //     this.checkRookCastling(fieldList, field)
-        // }
+        if (!field.getInCheck() && this.firstMove && checkForCheck) {
+            this.checkRookCastling(possibleMoveList, fieldList, field)
+        }
 
         // one square in every direction
         this.pushIfNotCheck(possibleMoveList, fieldList, field.getX(), field.getY() - 1, field, checkForCheck)
