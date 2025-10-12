@@ -1,4 +1,4 @@
-import {AiFillSetting} from "react-icons/all";
+import { AiFillSetting } from "react-icons/ai";
 
 const MatchInteraction = ({ started, showButtons, showMatchInteraction, language, setShowMatchInteraction, pauseMatch, defineVictor }) => {
     const onSettingsClick = () => {
